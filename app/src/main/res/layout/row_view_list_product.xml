@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootProduct"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cvProduct"
+        android:layout_width="140dp"
+        android:layout_height="180dp"
+        app:cardCornerRadius="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imgProduct"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:srcCompat="@tools:sample/avatars" />
+
+
+        <CheckBox
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="end"
+            android:layout_margin="8dp"
+            android:background="@drawable/selector_favorite"
+            android:button="@null"
+            android:checked="false"
+            android:id="@+id/wishList"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@id/cvProduct"
+            app:layout_constraintTop_toTopOf="@id/cvProduct" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/txtProductCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/cvProduct"
+        app:layout_constraintTop_toBottomOf="@id/cvProduct"
+        tools:text="Co-polymer Sealants (DIY)" />
+
+    <TextView
+        android:id="@+id/txtProductCode"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:scrollHorizontally="false"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/cvProduct"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/cvProduct"
+        app:layout_constraintTop_toBottomOf="@+id/txtProductCategory"
+        tools:text="0123456789" />
+
+    <TextView
+        android:id="@+id/txtProductName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:scrollHorizontally="false"
+        android:textColor="@color/black"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/cvProduct"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/cvProduct"
+        app:layout_constraintTop_toBottomOf="@+id/txtProductCode"
+        tools:text="30cm Round Chafing Dish w Glass Lid  Frame, LUSH" />
+
+    <TextView
+        android:id="@+id/txtPrice"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:scrollHorizontally="false"
+        android:textColor="@color/black"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/cvProduct"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/cvProduct"
+        app:layout_constraintTop_toBottomOf="@id/txtProductName"
+        tools:text="$S 5" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

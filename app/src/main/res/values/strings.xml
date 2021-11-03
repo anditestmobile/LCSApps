@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">LCS Apps</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hint_to">Input/Scan your Transfer Order here</string>
+    <string name="hint_bin">Input bin here</string>
+    <string name="hint_batch">Input/Scan your Batch here</string>
+    <string name="hint_strg_bin">Input/Scan barcode here</string>
+    <string name="hint_mat_num">Enter Product Code here</string>
+    <string name="scan">SCAN</string>
+    <string name="delete_all"><u>Delete All</u></string>
+
+
+    <string name="login_msg_empty_username">Please fill the username</string>
+    <string name="login_msg_empty_password">Please fill the password</string>
+</resources>

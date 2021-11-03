@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/home"
+        android:icon="@drawable/ic_round_home_24"
+        android:title="Home"/>
+    <item android:id="@+id/barcodeScanner"
+        android:icon="@drawable/ic_barcode_scanner"
+        android:title="Barcode scanner"/>
+    <item android:id="@+id/favorite"
+        android:icon="@drawable/ic_star_24"
+        android:title="Favorite"/>
+</menu>

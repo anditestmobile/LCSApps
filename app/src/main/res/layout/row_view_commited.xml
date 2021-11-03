@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/clSS"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:visibility="visible">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="5dp">
+
+        <!-- TextView Nama Mahasiwa -->
+        <TextView
+            android:id="@+id/txtDocType"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="35"
+            android:gravity="center"
+            android:background="@drawable/border"
+            android:text="Doc Type" />
+
+        <!-- TextView Npm Mahasiswa -->
+        <TextView
+            android:id="@+id/txtDocNum"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="35"
+            android:gravity="center"
+            android:background="@drawable/border"
+            android:text="Doc Num" />
+
+        <!-- TextView NoHp Mahasiswa -->
+        <TextView
+            android:id="@+id/txtQty"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="30"
+            android:gravity="center"
+            android:background="@drawable/border"
+            android:text="Qty" />
+
+    </LinearLayout>
+
+</RelativeLayout>

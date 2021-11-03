@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/rootWishlist"
+    android:layout_margin="4dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="16dp">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvProduct"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="8dp"
+            app:cardCornerRadius="16dp"
+            app:layout_constraintEnd_toEndOf="@id/guidelineEndOfProduct"
+            app:layout_constraintStart_toEndOf="@+id/txtIndex"
+            app:layout_constraintTop_toTopOf="@+id/txtIndex">
+
+            <ImageView
+                android:id="@+id/imgProduct"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:srcCompat="@tools:sample/avatars" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineEndOfProduct"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.35" />
+
+
+        <TextView
+            android:id="@+id/labelPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Price"
+            android:textSize="12sp"
+            app:layout_constraintTop_toTopOf="@id/rvProductDetail"
+            app:layout_constraintEnd_toStartOf="@+id/imgFavorite"/>
+
+        <TextView
+            android:id="@+id/txtPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@id/labelPrice"
+            app:layout_constraintStart_toStartOf="@+id/labelPrice"
+            app:layout_constraintTop_toBottomOf="@id/labelPrice"
+            tools:text="$42" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvProductDetail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/txtPrice"
+            app:layout_constraintStart_toEndOf="@id/cvProduct"
+            app:layout_constraintTop_toTopOf="@id/cvProduct" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvProductDetail2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toStartOf="@+id/txtPrice"
+            app:layout_constraintStart_toEndOf="@id/cvProduct"
+            app:layout_constraintTop_toBottomOf="@id/rvProductDetail"/>
+
+
+<!--        <TextView-->
+<!--            android:id="@+id/txtShowMore"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="16dp"-->
+<!--            android:text="Show more"-->
+<!--            android:enabled="false"-->
+<!--            android:paddingEnd="16dp"-->
+<!--            android:paddingRight="16dp"-->
+<!--            android:textColor="@color/black"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="@id/imgFavorite"-->
+<!--            app:layout_constraintVertical_bias="1.0" />-->
+
+        <TextView
+            android:id="@+id/labelBarcode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Barcode"
+            android:textSize="12sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@id/cvProduct"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@id/cvProduct"
+            app:layout_constraintTop_toBottomOf="@id/cvProduct" />
+
+        <ImageView
+            android:id="@+id/imgBarcode"
+            android:layout_width="120dp"
+            android:layout_height="90dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@id/cvProduct"
+            app:layout_constraintStart_toStartOf="@id/cvProduct"
+            app:layout_constraintTop_toBottomOf="@id/labelBarcode" />
+
+        <TextView
+            android:id="@+id/txtIndex"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_index"
+            android:padding="16dp"
+            android:text="1"
+            android:textColor="#fff"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <CheckBox
+            android:id="@+id/imgFavorite"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:button="@null"
+            android:paddingLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:paddingBottom="8dp"
+            android:layout_marginRight="16dp"
+            android:checked="true"
+            android:background="@drawable/selector_favorite"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginEnd="16dp" />
+
+        <LinearLayout
+            android:id="@+id/layoutAddToCart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_mini_addtocart"
+            android:backgroundTint="@color/colorPrimary"
+            android:layout_marginBottom="16dp"
+            android:padding="10dp"
+            app:layout_constraintTop_toBottomOf="@id/txtPrice"
+            app:layout_constraintVertical_bias="1.0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="4dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_baseline_shopping_cart_24"
+                android:id="@+id/imgCart"
+                android:layout_marginRight="4dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add"
+                android:textColor="#ffffff"
+                android:layout_gravity="center_vertical"/>
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="text_margin">16dp</dimen>
+    <dimen name="content_margin">20dp</dimen>
+
+    <dimen name="button_cornerRadius">24dp</dimen>
+    <dimen name="button_padding">16dp</dimen>
+    <dimen name="button_textSize">13sp</dimen>
+
+    <dimen name="superSmall_textSize">10sp</dimen>
+    <dimen name="ssSmall_textSize">8sp</dimen>
+    <dimen name="superSub_textSize">11sp</dimen>
+    <dimen name="sub_textSize">12sp</dimen>
+    <dimen name="regular_textSize">14sp</dimen>
+    <dimen name="subHeader_textSize">16sp</dimen>
+    <dimen name="big_textSize">18sp</dimen>
+    <dimen name="header_textSize">24sp</dimen>
+
+    <dimen name="shimmer16">16dp</dimen>
+    <dimen name="shimmer25">25dp</dimen>
+    <dimen name="shimmer40">40dp</dimen>
+    <dimen name="shimmer100">100dp</dimen>
+</resources>
