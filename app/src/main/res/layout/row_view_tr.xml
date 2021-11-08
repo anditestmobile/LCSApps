@@ -126,6 +126,7 @@
                         android:layout_below="@+id/txt3"
                         android:text="0"
                         android:textSize="20sp"
+                        android:inputType="number"
                         android:textColor="@color/black" />
 
                     <TextView

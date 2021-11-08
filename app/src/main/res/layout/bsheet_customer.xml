@@ -43,8 +43,8 @@
         android:text="NO"
         android:textColor="@color/black"
         app:layout_constraintEnd_toStartOf="@+id/guidelineHalfContent"
-        app:layout_constraintStart_toStartOf="@+id/edtMobileNumber"
-        app:layout_constraintTop_toBottomOf="@+id/edtMobileNumber" />
+        app:layout_constraintStart_toStartOf="@+id/edtRemarks"
+        app:layout_constraintTop_toBottomOf="@+id/edtRemarks" />
 
     <Button
         android:id="@+id/btnEmail"
@@ -101,10 +101,34 @@
         android:layout_marginTop="5dp"
         android:ems="10"
         android:hint="Mobile number"
-        android:imeOptions="actionDone"
+        android:imeOptions="actionNext"
         android:inputType="phone"
         app:layout_constraintEnd_toEndOf="@+id/edtCompanyName"
         app:layout_constraintStart_toStartOf="@+id/edtCompanyName"
         app:layout_constraintTop_toBottomOf="@+id/edtCompanyName" />
+
+    <EditText
+        android:id="@+id/edtShipTo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:ems="10"
+        android:hint="Ship To"
+        android:imeOptions="actionNext"
+        app:layout_constraintEnd_toEndOf="@+id/edtMobileNumber"
+        app:layout_constraintStart_toStartOf="@+id/edtMobileNumber"
+        app:layout_constraintTop_toBottomOf="@+id/edtMobileNumber" />
+
+    <EditText
+        android:id="@+id/edtRemarks"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:ems="10"
+        android:hint="Remarks"
+        android:imeOptions="actionDone"
+        app:layout_constraintEnd_toEndOf="@+id/edtShipTo"
+        app:layout_constraintStart_toStartOf="@+id/edtShipTo"
+        app:layout_constraintTop_toBottomOf="@+id/edtShipTo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

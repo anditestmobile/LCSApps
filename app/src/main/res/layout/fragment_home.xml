@@ -144,6 +144,18 @@
                 android:paddingLeft="16dp"
                 android:drawableRight="@drawable/ic_baseline_search_24" />
 
+            <Spinner
+                android:id="@+id/spBrand"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:padding="4dp"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:background="@drawable/spinner_border"
+                app:layout_constraintStart_toStartOf="@id/guidelineMarginStart"
+                app:layout_constraintTop_toBottomOf="@id/edtSearch" />
+
             <TextView
                 android:id="@+id/txtCategory"
                 android:layout_width="wrap_content"
@@ -151,6 +163,7 @@
                 android:layout_marginTop="16dp"
                 android:padding="4dp"
                 android:text="Category"
+                android:visibility="gone"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="@id/guidelineMarginStart"
@@ -161,6 +174,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:scrollbars="none"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@id/txtCategory"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/txtCategory"
@@ -178,9 +192,10 @@
                 android:id="@+id/rvCategory"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@id/txtCategory"
-                app:layout_constraintTop_toBottomOf="@id/horizontalSc" />
+                app:layout_constraintStart_toStartOf="@id/spBrand"
+                app:layout_constraintTop_toBottomOf="@+id/spBrand" />
 
             <ProgressBar
                 android:id="@+id/bottomProgressBar"

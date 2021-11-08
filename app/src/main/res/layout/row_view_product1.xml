@@ -11,7 +11,6 @@
         android:layout_width="0dp"
         android:layout_height="120dp"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
         app:cardCornerRadius="16dp"
         app:layout_constraintEnd_toEndOf="@id/guidelineEndOfProduct"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,6 +22,18 @@
             android:layout_height="match_parent"
             tools:srcCompat="@tools:sample/avatars" />
     </androidx.cardview.widget.CardView>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textSize="10sp"
+        android:text="Transfer\nRequest"
+        app:layout_constraintEnd_toEndOf="@+id/cvProduct"
+        app:layout_constraintStart_toStartOf="@+id/cvProduct"
+        app:layout_constraintTop_toBottomOf="@+id/cvProduct" />
+
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineEndOfProduct"
@@ -57,22 +68,22 @@
         app:layout_constraintTop_toBottomOf="@+id/txtPrice"
         app:layout_constraintVertical_bias="1.0" />
 
+    <!--    app:layout_constraintTop_toBottomOf="@id/btnAdd"-->
+
     <EditText
         android:id="@+id/edtAmount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="2dp"
         android:gravity="center"
+        android:padding="2dp"
         android:text="1"
-        app:layout_constraintVertical_bias="1.0"
         android:textColor="@color/black"
         android:textSize="18sp"
+        android:inputType="number"
         app:layout_constraintBottom_toTopOf="@+id/btnRemove"
         app:layout_constraintEnd_toEndOf="@id/btnAdd"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.687"
         app:layout_constraintStart_toStartOf="@id/btnAdd" />
-
-<!--    app:layout_constraintTop_toBottomOf="@id/btnAdd"-->
 
     <ImageView
         android:id="@+id/btnRemove"

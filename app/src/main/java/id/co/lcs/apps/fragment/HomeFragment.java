@@ -14,6 +14,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -30,6 +32,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.chip.Chip;
+import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
 
@@ -341,7 +344,9 @@ public class HomeFragment extends BaseFragment {
                 filteredListCategory.add(new Category(item.getCategory(), filteredListProduct));
             }
         }
-        categoryAdapter.filterList(filteredListCategory);
+        if(categoryAdapter != null) {
+            categoryAdapter.filterList(filteredListCategory);
+        }
     }
 
     private void filterCategory(String text) {
@@ -417,35 +422,58 @@ public class HomeFragment extends BaseFragment {
     }
 
     public void setCategoryChips(List<Category> categories) {
-        binding.chipGroup.removeAllViews();
-        Chip allChip = (Chip) this.getLayoutInflater().inflate(R.layout.item_chip_brand, null, false);
-        allChip.setText("All");
-        allChip.setOnClickListener(new View.OnClickListener() {
+        List<String> listBrands = new ArrayList<>();
+        listBrands.add("Select Brand");
+        for (Category category : categories) {
+            listBrands.add(category.getCategory());
+        }
+        ArrayAdapter<String> dataBrandAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, listBrands);
+        dataBrandAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.spBrand.setAdapter(dataBrandAdapter);
+        binding.spBrand.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onClick(View view) {
-                filter("");
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(position == 0){
+                    filter("");
+                }else{
+                    filterCategory(listBrands.get(position));
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
-        binding.chipGroup.addView(allChip);
-        for (Category category :
-                categories) {
-            Chip mChip = (Chip) this.getLayoutInflater().inflate(R.layout.item_chip_brand, null, false);
-            mChip.setText(category.getCategory());
-            int paddingDp = (int) TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_DIP, 10,
-                    getResources().getDisplayMetrics()
-            );
-            mChip.setPadding(paddingDp, 0, paddingDp, 0);
-            mChip.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    CompoundButton b = (CompoundButton) v;
-                    String buttonText = b.getText().toString();
-                    filterCategory(buttonText);
-                }
-            });
-            binding.chipGroup.addView(mChip);
-        }
+//        binding.chipGroup.removeAllViews();
+//        Chip allChip = (Chip) this.getLayoutInflater().inflate(R.layout.item_chip_brand, null, false);
+//        allChip.setText("All");
+//        allChip.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                filter("");
+//            }
+//        });
+//        binding.chipGroup.addView(allChip);
+//        for (Category category :
+//                categories) {
+//            Chip mChip = (Chip) this.getLayoutInflater().inflate(R.layout.item_chip_brand, null, false);
+//            mChip.setText(category.getCategory());
+//            int paddingDp = (int) TypedValue.applyDimension(
+//                    TypedValue.COMPLEX_UNIT_DIP, 10,
+//                    getResources().getDisplayMetrics()
+//            );
+//            mChip.setPadding(paddingDp, 0, paddingDp, 0);
+//            mChip.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    CompoundButton b = (CompoundButton) v;
+//                    String buttonText = b.getText().toString();
+//                    filterCategory(buttonText);
+//                }
+//            });
+//            binding.chipGroup.addView(mChip);
+//        }
     }
 
     public void checkWishList(Product data, boolean wishList) {
