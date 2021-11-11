@@ -84,7 +84,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="25"
-                    android:orientation="vertical"
+                    android:orientation="horizontal"
                     android:paddingLeft="15dp"
                     android:paddingTop="5dp"
                     android:paddingRight="15dp"
@@ -95,6 +95,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="QTY"
+                        android:layout_marginRight="10dp"
                         android:textSize="12sp" />
 
                     <EditText
@@ -112,6 +113,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="PCS"
+                        android:layout_marginLeft="10dp"
                         android:textColor="@color/black"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -119,14 +121,14 @@
                 <RelativeLayout
                     android:id="@+id/itemTypeSNBatch"
                     android:layout_width="0dp"
+                    android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="75"
                     android:paddingLeft="15dp"
                     android:paddingTop="5dp"
                     android:paddingRight="15dp"
-                    android:paddingBottom="5dp"
-                    android:visibility="gone">
+                    android:paddingBottom="5dp">
 
                     <EditText
                         android:id="@+id/edtSNBatch"

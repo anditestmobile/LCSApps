@@ -9,6 +9,8 @@ public class SalesOrderDetails {
     private String itemName;
     @SerializedName("Qty")
     private String qty;
+    @SerializedName("Categories")
+    private String categories;
     @SerializedName("Warehouse")
     private String warehouse;
     @SerializedName("Price")
@@ -52,5 +54,13 @@ public class SalesOrderDetails {
 
     public void setPrice(String price) {
         this.price = price;
+    }
+
+    public String getCategories() {
+        return categories;
+    }
+
+    public void setCategories(String categories) {
+        this.categories = categories;
     }
 }

@@ -10,9 +10,11 @@ public class Constants {
     public static final String IS_LOGIN = "IsLoggedIn";
     public static final String LIST_PRODUCT = "List Product";
     public static final String LIST_CART = "List Cart";
+    public static final String LIST_QUOTATION = "List Quotation";
     public static final String LIST_CART_POS = "List Cart";
     public static final String LIST_DETAIL_SUPPLIER_GR = "List Detail Supplier GR";
     public static final String LIST_DETAIL_GR = "List Detail GR";
+    public static final String QUOTATION_HISTORY = "Quotation History";
     public static final String IMAGE_URL = "Image URL";
     public static final String LOGIN = "LOGINS";
     public static final String POS_MENU = "Position Menu";
@@ -35,6 +37,7 @@ public class Constants {
     public static final String API_STOCK_DETAILS = "StockDetails/getStockDetails";
     public static final String API_TRANSFER_POSTING = "ITR/ITPosting";
     public static final String API_GR_INTERNAL = "IT/getInventoryTransfer";
+    public static final String API_GET_QUOTATION = "GetQuotation";
     public static final String API_GR_PO = "GRPO/getGRPODetails";
     public static final String API_GR_PO_DETAILS = "GRPOLine/getGRPOLineDetails";
     public static final String API_GR_PO_SUPPLIERS = "PODetailsandGRPOPosting/GetPODetails";

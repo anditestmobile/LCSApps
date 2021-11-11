@@ -6,6 +6,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class SalesOrderRequest {
+    @SerializedName("Quotation")
+    private String quotation;
     @SerializedName("CustomerCode")
     private String customerCode;
     @SerializedName("Name")
@@ -20,6 +22,10 @@ public class SalesOrderRequest {
     private String compName;
     @SerializedName("Phone")
     private String phone;
+    @SerializedName("ShipTo")
+    private String shipTo;
+    @SerializedName("Remarks")
+    private String remarks;
     @SerializedName("SODraftItem")
     private List<SalesOrderDetails> soItem;
 
@@ -85,5 +91,29 @@ public class SalesOrderRequest {
 
     public void setSoItem(List<SalesOrderDetails> soItem) {
         this.soItem = soItem;
+    }
+
+    public String getQuotation() {
+        return quotation;
+    }
+
+    public void setQuotation(String quotation) {
+        this.quotation = quotation;
+    }
+
+    public String getShipTo() {
+        return shipTo;
+    }
+
+    public void setShipTo(String shipTo) {
+        this.shipTo = shipTo;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 }

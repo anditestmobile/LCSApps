@@ -1,22 +1,9 @@
 package id.co.lcs.apps.activity;
 
-import android.content.ContentResolver;
-import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.media.Image;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.text.Html;
-import android.util.Base64;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -25,23 +12,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.WriterException;
-import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -49,13 +27,14 @@ import java.util.List;
 
 import id.co.lcs.apps.R;
 import id.co.lcs.apps.adapter.CartAdapter;
+import id.co.lcs.apps.adapter.ProductDetailAdapter;
+import id.co.lcs.apps.adapter.QuotationAdapter;
 import id.co.lcs.apps.constants.Constants;
 import id.co.lcs.apps.databinding.ActivityCartBinding;
+import id.co.lcs.apps.databinding.ActivityQuotationBinding;
 import id.co.lcs.apps.helper.Helper;
-import id.co.lcs.apps.helper.QRCodeHelper;
-import id.co.lcs.apps.model.ProductDetail;
-import id.co.lcs.apps.adapter.ProductDetailAdapter;
 import id.co.lcs.apps.model.Product;
+import id.co.lcs.apps.model.ProductDetail;
 import id.co.lcs.apps.model.SalesOrderDetails;
 import id.co.lcs.apps.model.SalesOrderRequest;
 import id.co.lcs.apps.model.SalesOrderResponse;
@@ -63,12 +42,11 @@ import id.co.lcs.apps.model.StockDetailsReponse;
 import id.co.lcs.apps.model.StockDetailsRequest;
 import id.co.lcs.apps.model.WMDetailStock;
 import id.co.lcs.apps.model.WMStock;
-import id.co.lcs.apps.model.WSMessageResponse;
 import id.co.lcs.apps.utils.Utils;
 
-public class CartActivity extends BaseActivity {
-    private ActivityCartBinding binding;
-    private CartAdapter cartAdapter;
+public class QuotationActivity extends BaseActivity {
+    private ActivityQuotationBinding binding;
+    private QuotationAdapter quotationAdapter;
     private ArrayList<Product> productArrayList = new ArrayList<>();
     private ArrayList<ProductDetail> productDetailArrayList = new ArrayList<>();
     private ArrayList<ProductDetail> productDetailArrayListMore = new ArrayList<>();
@@ -85,12 +63,13 @@ public class CartActivity extends BaseActivity {
     private List<Integer> pos = new ArrayList<>();
     private SalesOrderResponse wsResponse;
     private EditText edtCompName, edtMobileNumber, edtCustomerCode, edtShipTo, edtRemarks;
+    private SalesOrderRequest quotation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityCartBinding.inflate(getLayoutInflater());
+        binding = ActivityQuotationBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
 
@@ -102,6 +81,7 @@ public class CartActivity extends BaseActivity {
     }
 
     private void initData() {
+        quotation = (SalesOrderRequest) Helper.getItemParam(Constants.QUOTATION_HISTORY);
         productArrayList = (ArrayList<Product>) Helper.getItemParam(Constants.LIST_CART);
         if (productArrayList == null || productArrayList.size() == 0) {
             binding.rvCart.setVisibility(View.GONE);
@@ -137,7 +117,7 @@ public class CartActivity extends BaseActivity {
                         for (Product product : productArrayList) {
                             product.setStatusCheckout(b);
                         }
-                        cartAdapter.notifyDataSetChanged();
+                        quotationAdapter.notifyDataSetChanged();
                         countTotal();
                         FLAG_CHECKALL = true;
                     } else {
@@ -171,10 +151,10 @@ public class CartActivity extends BaseActivity {
         binding.rvCart.setLayoutManager(new LinearLayoutManager(this));
         binding.rvCart.setHasFixedSize(true);
 
-        cartAdapter = new CartAdapter(this, productArrayList);
-        binding.rvCart.setAdapter(cartAdapter);
+        quotationAdapter = new QuotationAdapter(this, productArrayList);
+        binding.rvCart.setAdapter(quotationAdapter);
 
-        binding.btnCheckout.setOnClickListener(new View.OnClickListener() {
+        binding.btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                showDialogConfirmationCheckOut();
@@ -306,7 +286,7 @@ public class CartActivity extends BaseActivity {
                     @Override
                     public void onClick(View view) {
                         productArrayList.remove(position);
-                        cartAdapter.notifyDataSetChanged();
+                        quotationAdapter.notifyDataSetChanged();
                         if (productArrayList.size() == 0) {
                             binding.rvCart.setVisibility(View.GONE);
                             binding.rootCheckout.setVisibility(View.GONE);
@@ -388,7 +368,7 @@ public class CartActivity extends BaseActivity {
                     @Override
                     public void onClick(View view) {
                         bottomSheet.dismiss();
-                        Toast.makeText(CartActivity.this, "Order sent to your email", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(QuotationActivity.this, "Order sent to your email", Toast.LENGTH_SHORT).show();
                         onBackPressed();
                     }
                 });
@@ -397,7 +377,7 @@ public class CartActivity extends BaseActivity {
                     @Override
                     public void onClick(View view) {
 //                        bottomSheet.dismiss();
-                        Intent intent = new Intent(CartActivity.this, SoActivity.class);
+                        Intent intent = new Intent(QuotationActivity.this, SoActivity.class);
                         startActivity(intent);
                     }
                 });
@@ -405,7 +385,7 @@ public class CartActivity extends BaseActivity {
                 btnSkip.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(CartActivity.this, "Order sent", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(QuotationActivity.this, "Order sent", Toast.LENGTH_SHORT).show();
                         bottomSheetDialog.dismiss();
                         onBackPressed();
                     }
@@ -582,7 +562,7 @@ public class CartActivity extends BaseActivity {
 
     public void showPreview(Product data) {
         Helper.setItemParam(Constants.IMAGE_URL, data.getImageUrl());
-        Intent intent = new Intent(CartActivity.this, PreviewImageActivity.class);
+        Intent intent = new Intent(QuotationActivity.this, PreviewImageActivity.class);
         startActivity(intent);
     }
 
@@ -677,7 +657,7 @@ public class CartActivity extends BaseActivity {
         }
         Helper.setItemParam(Constants.LIST_CART, productArrayList);
         Helper.setItemParam(Constants.BAR_CODE, wsResponse.getResponseData().getDocNum());
-        Intent intent = new Intent(CartActivity.this, BarcodeActivity.class);
+        Intent intent = new Intent(QuotationActivity.this, BarcodeActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }

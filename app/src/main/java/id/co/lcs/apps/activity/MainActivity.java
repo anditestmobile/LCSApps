@@ -65,10 +65,10 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
             }
         });
 
-        binding.btnDeliveryStatus.setOnClickListener(new View.OnClickListener() {
+        binding.btnHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, DeliveryStatusActivity.class);
+                Intent intent = new Intent(MainActivity.this, QuotationHistoryActivity.class);
                 startActivity(intent);
             }
         });

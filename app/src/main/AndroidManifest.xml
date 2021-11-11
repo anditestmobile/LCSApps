@@ -86,6 +86,12 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.PointOfSalesActivity"
             android:screenOrientation="portrait"/>
+
+        <activity android:name=".activity.QuotationHistoryActivity"
+            android:screenOrientation="portrait"></activity>
+
+        <activity android:name=".activity.QuotationActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

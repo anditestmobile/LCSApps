@@ -104,40 +104,48 @@
                 app:layout_constraintGuide_percent="0.80" />
 
             <ImageView
-                android:id="@+id/btnDeliveryStatus"
+                android:id="@+id/btnHistory"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                android:src="@drawable/ic_delivery"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@id/btnCart"
-                app:layout_constraintEnd_toStartOf="@+id/btnCart"
-                app:layout_constraintTop_toTopOf="@id/btnCart" />
+                android:src="@drawable/ic_history"
+                app:layout_constraintBottom_toBottomOf="@id/relative1"
+                app:layout_constraintEnd_toStartOf="@+id/relative1"
+                app:layout_constraintTop_toTopOf="@id/relative1" />
 
-            <ImageView
-                android:id="@+id/btnCart"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:src="@mipmap/ic_shopping_bag"
+
+            <RelativeLayout
+                android:id="@+id/relative1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/cartNotif"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:background="@drawable/bg_circle"
-                android:gravity="center"
-                android:text="0"
-                android:textColor="@android:color/white"
-                android:textSize="13sp"
-                app:layout_constraintEnd_toStartOf="@+id/guideline5"
-                app:layout_constraintRight_toRightOf="@id/btnCart"
-                app:layout_constraintTop_toTopOf="@id/btnCart" />
+                <ImageView
+                    android:id="@+id/btnCart"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/ic_shopping_cart" />
+
+                <TextView
+                    android:id="@+id/cartNotif"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_alignTop="@id/btnCart"
+                    android:layout_alignRight="@id/btnCart"
+                    android:background="@drawable/bg_circle"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textColor="@color/white"
+                    android:textSize="9sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
