@@ -15,6 +15,8 @@ public class SalesOrderDetails {
     private String warehouse;
     @SerializedName("Price")
     private String price;
+    @SerializedName("ImgURL")
+    private String imgUrl;
 
     public String getItemCode() {
         return itemCode;
@@ -62,5 +64,13 @@ public class SalesOrderDetails {
 
     public void setCategories(String categories) {
         this.categories = categories;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 }

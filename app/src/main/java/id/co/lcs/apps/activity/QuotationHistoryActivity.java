@@ -111,7 +111,8 @@ public class QuotationHistoryActivity extends BaseActivity {
     public void showDetail(SalesOrderRequest data) {
         quotation = data;
         Helper.setItemParam(Constants.QUOTATION_HISTORY, quotation);
-        Intent intent = new Intent(getApplicationContext(), QuotationActivity.class);
+        Intent intent = new Intent(getApplicationContext(), CartActivity.class);
+        Helper.UPDATE_CART = false;
         startActivity(intent);
     }
 

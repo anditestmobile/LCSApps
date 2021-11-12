@@ -70,6 +70,7 @@ public class BarcodeActivity extends BaseActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 Helper.removeItemParam(Constants.BAR_CODE);
+                Helper.removeItemParam(Constants.QUOTATION_HISTORY);
             }
         });
         String barcode = Helper.getItemParam(Constants.BAR_CODE).toString();

@@ -65,7 +65,7 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.50121653" />
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/edtCustomerCode"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

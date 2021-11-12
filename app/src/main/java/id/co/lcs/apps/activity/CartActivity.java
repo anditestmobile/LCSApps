@@ -13,11 +13,15 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.Editable;
 import android.text.Html;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -53,6 +57,9 @@ import id.co.lcs.apps.constants.Constants;
 import id.co.lcs.apps.databinding.ActivityCartBinding;
 import id.co.lcs.apps.helper.Helper;
 import id.co.lcs.apps.helper.QRCodeHelper;
+import id.co.lcs.apps.model.Customer;
+import id.co.lcs.apps.model.CustomerRequest;
+import id.co.lcs.apps.model.CustomerResponse;
 import id.co.lcs.apps.model.ProductDetail;
 import id.co.lcs.apps.adapter.ProductDetailAdapter;
 import id.co.lcs.apps.model.Product;
@@ -84,7 +91,12 @@ public class CartActivity extends BaseActivity {
     private SalesOrderRequest soRequest;
     private List<Integer> pos = new ArrayList<>();
     private SalesOrderResponse wsResponse;
-    private EditText edtCompName, edtMobileNumber, edtCustomerCode, edtShipTo, edtRemarks;
+    private EditText edtCompName, edtMobileNumber, edtShipTo, edtRemarks;
+    private AutoCompleteTextView edtCustomerCode;
+    private CustomerResponse listCust;
+    private int FLAG_CUST = 0;
+    private String textCust;
+    private SalesOrderRequest updateCart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +114,26 @@ public class CartActivity extends BaseActivity {
     }
 
     private void initData() {
+        updateCart = (SalesOrderRequest) Helper.getItemParam(Constants.QUOTATION_HISTORY);
+        if (updateCart != null && !Helper.UPDATE_CART) {
+            Helper.removeItemParam(Constants.LIST_CART);
+            ArrayList<Product> listProduct = new ArrayList<>();
+            ArrayList<ProductDetail> listProductDetail = new ArrayList<>();
+
+            for (SalesOrderDetails data : updateCart.getSoItem()) {
+                listProductDetail.add(new ProductDetail("Product Name:", data.getItemName()));
+                Product p = new Product(data.getItemCode(), data.getItemName(), data.getCategories(), data.getImgUrl()
+                        , "0", Double.parseDouble(data.getPrice())*Integer.parseInt(data.getQty().split("\\.")[0])
+                        , 0, 0, 0, Integer.parseInt(data.getQty().split("\\.")[0])
+                        , false, true, listProductDetail, null);
+                listProduct.add(p);
+            }
+            Helper.setItemParam(Constants.LIST_CART, listProduct);
+            Helper.UPDATE_CART = true;
+        }
+        if(updateCart != null){
+            binding.btnCheckout.setText("UPDATE");
+        }
         productArrayList = (ArrayList<Product>) Helper.getItemParam(Constants.LIST_CART);
         if (productArrayList == null || productArrayList.size() == 0) {
             binding.rvCart.setVisibility(View.GONE);
@@ -214,8 +246,8 @@ public class CartActivity extends BaseActivity {
         detail = new ProductDetail();
         List<WMDetailStock> dataStock = new ArrayList<>();
 //        dataStock  = sdResponse.getResponseData().get(0).getDetailStocks();
-        for(WMStock stock : sdResponse.getResponseData()){
-            if(stock.getIdMaterial().equals(itemCode)){
+        for (WMStock stock : sdResponse.getResponseData()) {
+            if (stock.getIdMaterial().equals(itemCode)) {
                 dataStock = stock.getDetailStocks();
                 break;
             }
@@ -340,7 +372,17 @@ public class CartActivity extends BaseActivity {
                 edtShipTo = itemView.findViewById(R.id.edtShipTo);
                 edtRemarks = itemView.findViewById(R.id.edtRemarks);
 
-//                txtTitle.setText("Are you sure want to checkout?\nSales order confirmation will be emailed to you.");
+                if(updateCart.getQuotation() != null){
+                    edtCustomerCode.setText(updateCart.getCustomerCode());
+                    edtMobileNumber.setText(updateCart.getPhone());
+                    edtCompName.setText(updateCart.getCompName());
+                    edtShipTo.setText(updateCart.getShipTo());
+                    edtRemarks.setText(updateCart.getRemarks());
+                    edtCustomerCode.setEnabled(false);
+                    edtMobileNumber.setEnabled(false);
+                    edtCompName.setEnabled(false);
+                    edtRemarks.setEnabled(false);
+                }
                 btnYes.setText("Confirm");
 
                 btnYes.setOnClickListener(new View.OnClickListener() {
@@ -367,6 +409,38 @@ public class CartActivity extends BaseActivity {
                     @Override
                     public void onClick(View view) {
                         bottomSheetDialog.dismiss();
+                    }
+                });
+
+                edtCustomerCode.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
+                        if (listCust != null && listCust.getResponseData().size() != 0) {
+                            for (Customer temp : listCust.getResponseData()) {
+                                if ((temp.getCustomerCode() + "-" + temp.getName()).equals(editable.toString())) {
+                                    edtCompName.setText(temp.getCompanyName());
+                                    FLAG_CUST = 1;
+                                }
+                            }
+                        }
+                        if (FLAG_CUST == 0 && editable.toString().length() >= 3) {
+                            edtCompName.setText("");
+                            textCust = editable.toString();
+                            PARAM = 2;
+                            new RequestUrl().execute();
+                        } else {
+                            FLAG_CUST = 0;
+                        }
                     }
                 });
             });
@@ -433,41 +507,23 @@ public class CartActivity extends BaseActivity {
                 edtAmount.setVisibility(View.GONE);
                 txtPrice.setVisibility(View.GONE);
 
-
-                txtTitle.setText("Are you sure want to checkout?");
-                btnYes.setText("CheckOut");
+                if(updateCart == null) {
+                    txtTitle.setText("Are you sure want to checkout?");
+                    btnYes.setText("CheckOut");
+                }else{
+                    txtTitle.setText("Are you sure want to update this quotation?");
+                    btnYes.setText("Update");
+                }
 
                 btnYes.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-                        Calendar delDate = Helper.todayDate();
-                        delDate.add(Calendar.DATE, 2);
-                        soRequest = new SalesOrderRequest();
-                        soRequest.setCustomerCode(edtCustomerCode.getText().toString());
-                        soRequest.setName(edtCompName.getText().toString());
-                        soRequest.setUserId(user.getFirstName());
-                        soRequest.setDate(Helper.todayDate1("yyyyMMdd"));
-                        soRequest.setCompName(edtCompName.getText().toString());
-                        soRequest.setPhone(edtMobileNumber.getText().toString());
-                        soRequest.setShipTo(edtShipTo.getText().toString());
-                        soRequest.setRemarks(edtRemarks.getText().toString());
-                        soRequest.setDelDate(sdf.format(delDate.getTime()));
-                        SalesOrderDetails soDetails = new SalesOrderDetails();
-                        List<SalesOrderDetails> listSO = new ArrayList<>();
-                        for (int i = 0; i < productArrayList.size(); i++) {
-                            if (productArrayList.get(i).isStatusCheckout()) {
-                                pos.add(i);
-                                soDetails.setItemCode(productArrayList.get(i).getProductCode());
-                                soDetails.setItemName(productArrayList.get(i).getProductName());
-                                soDetails.setPrice(String.valueOf(productArrayList.get(i).getPrice()));
-                                soDetails.setQty(String.valueOf(productArrayList.get(i).getQty()));
-                                soDetails.setWarehouse("01");
-                                listSO.add(soDetails);
-                            }
+                        if(updateCart == null) {
+                            setDataInsert();
+                        }else{
+                            setDataUpdate();
                         }
-                        soRequest.setSoItem(listSO);
                         PARAM = 1;
                         new RequestUrl().execute();
                         getProgressDialog().show();
@@ -483,6 +539,67 @@ public class CartActivity extends BaseActivity {
             });
 
         }
+    }
+
+    private void setDataInsert() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        Calendar delDate = Helper.todayDate();
+        delDate.add(Calendar.DATE, 2);
+        soRequest = new SalesOrderRequest();
+        soRequest.setCustomerCode(edtCustomerCode.getText().toString().split("-")[1]);
+        soRequest.setName(edtCompName.getText().toString());
+        soRequest.setUserId(user.getFirstName());
+        soRequest.setDate(Helper.todayDate1("yyyyMMdd"));
+        soRequest.setCompName(edtCompName.getText().toString());
+        soRequest.setPhone(edtMobileNumber.getText().toString());
+        soRequest.setShipTo(edtShipTo.getText().toString());
+        soRequest.setRemarks(edtRemarks.getText().toString());
+        soRequest.setDelDate(sdf.format(delDate.getTime()));
+        SalesOrderDetails soDetails = new SalesOrderDetails();
+        List<SalesOrderDetails> listSO = new ArrayList<>();
+        for (int i = 0; i < productArrayList.size(); i++) {
+            if (productArrayList.get(i).isStatusCheckout()) {
+                pos.add(i);
+                soDetails.setItemCode(productArrayList.get(i).getProductCode());
+                soDetails.setItemName(productArrayList.get(i).getProductName());
+                soDetails.setPrice(String.valueOf(productArrayList.get(i).getPrice()));
+                soDetails.setQty(String.valueOf(productArrayList.get(i).getQty()));
+                soDetails.setWarehouse("01");
+                listSO.add(soDetails);
+            }
+        }
+        soRequest.setSoItem(listSO);
+    }
+
+    private void setDataUpdate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        Calendar delDate = Helper.todayDate();
+        delDate.add(Calendar.DATE, 2);
+        soRequest = new SalesOrderRequest();
+        soRequest.setQuotation(updateCart.getQuotation());
+        soRequest.setCustomerCode(edtCustomerCode.getText().toString().split("-")[1]);
+        soRequest.setName(edtCompName.getText().toString());
+        soRequest.setUserId(user.getFirstName());
+        soRequest.setDate(Helper.todayDate1("yyyyMMdd"));
+        soRequest.setCompName(edtCompName.getText().toString());
+        soRequest.setPhone(edtMobileNumber.getText().toString());
+        soRequest.setShipTo(edtShipTo.getText().toString());
+        soRequest.setRemarks(edtRemarks.getText().toString());
+        soRequest.setDelDate(sdf.format(delDate.getTime()));
+        SalesOrderDetails soDetails = new SalesOrderDetails();
+        List<SalesOrderDetails> listSO = new ArrayList<>();
+        for (int i = 0; i < productArrayList.size(); i++) {
+            if (productArrayList.get(i).isStatusCheckout()) {
+                pos.add(i);
+                soDetails.setItemCode(productArrayList.get(i).getProductCode());
+                soDetails.setItemName(productArrayList.get(i).getProductName());
+                soDetails.setPrice(String.valueOf(productArrayList.get(i).getPrice()));
+                soDetails.setQty(String.valueOf(productArrayList.get(i).getQty()));
+                soDetails.setWarehouse("01");
+                listSO.add(soDetails);
+            }
+        }
+        soRequest.setSoItem(listSO);
     }
 
 
@@ -598,10 +715,17 @@ public class CartActivity extends BaseActivity {
                     sd.setBarcode("");
                     sd.setItemCode(itemCode);
                     return (StockDetailsReponse) Helper.postWebservice(url, sd, StockDetailsReponse.class);
-                } else {
+                } else if (PARAM == 1) {
                     String URL_SALES_ORDER = Constants.API_PREFIX + Constants.API_SALES_ORDER;
                     final String url = Helper.getItemParam(Constants.BASE_URL).toString().concat(URL_SALES_ORDER);
                     wsResponse = (SalesOrderResponse) Helper.postWebservice(url, soRequest, SalesOrderResponse.class);
+                    return null;
+                } else {
+                    String URL_CUSTOMER = Constants.API_PREFIX + Constants.API_GET_CUSTOMER;
+                    final String url = Helper.getItemParam(Constants.BASE_URL).toString().concat(URL_CUSTOMER);
+                    CustomerRequest customerRequest = new CustomerRequest();
+                    customerRequest.setCustomer(textCust);
+                    listCust = (CustomerResponse) Helper.postWebservice(url, customerRequest, CustomerResponse.class);
                     return null;
                 }
             } catch (Exception ex) {
@@ -636,7 +760,7 @@ public class CartActivity extends BaseActivity {
                         Toast.makeText(getApplicationContext(), response.getStatusMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
-            } else {
+            } else if (PARAM == 1) {
                 getProgressDialog().dismiss();
                 if (wsResponse != null) {
                     if (wsResponse.getStatusCode() == 1) {
@@ -658,9 +782,37 @@ public class CartActivity extends BaseActivity {
                     }
                     bottomSheetDialog.dismiss();
                 }
+            } else {
+                if (listCust != null) {
+                    if (listCust.getStatusCode() == 1) {
+                        setCustomer(listCust);
+                    }
+//                    else {
+//                        Toast.makeText(getApplicationContext(), listCust.getStatusMessage(), Toast.LENGTH_SHORT).show();
+//                    }
+                }
+//                else {
+//                    if (Helper.getItemParam(Constants.INTERNAL_SERVER_ERROR) != null) {
+//                        Toast.makeText(getApplicationContext(), Helper.getItemParam(Constants.INTERNAL_SERVER_ERROR).toString(), Toast.LENGTH_SHORT).show();
+//                    } else {
+//                        Toast.makeText(getApplicationContext(), listCust.getStatusMessage(), Toast.LENGTH_SHORT).show();
+//                    }
+//                }
             }
         }
 
+    }
+
+    private void setCustomer(CustomerResponse listCust) {
+        String[] cust = new String[listCust.getResponseData().size()];
+        for (int i = 0; i < listCust.getResponseData().size(); i++) {
+            cust[i] = listCust.getResponseData().get(i).getCustomerCode() + "-" + listCust.getResponseData().get(i).getName();
+        }
+
+        ArrayAdapter adapter = new
+                ArrayAdapter(this, R.layout.list_customer, R.id.item, cust);
+        edtCustomerCode.setAdapter(adapter);
+        edtCustomerCode.showDropDown();
     }
 
     private void onDone() {

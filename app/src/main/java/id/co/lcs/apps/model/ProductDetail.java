@@ -7,6 +7,14 @@ public class ProductDetail {
     private String label;
     private String value;
 
+    public ProductDetail() {
+    }
+
+    public ProductDetail(String label, String value) {
+        this.label = label;
+        this.value = value;
+    }
+
     public String getLabel() {
         return label;
     }

@@ -53,6 +53,7 @@ public class Helper {
     public static Map<String, Object> getParam() {
         return param;
     }
+    public static boolean UPDATE_CART = false;
 
     public static Object getItemParam(String key) {
         return param.get(key);

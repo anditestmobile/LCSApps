@@ -42,6 +42,7 @@ public class Constants {
     public static final String API_GR_PO_DETAILS = "GRPOLine/getGRPOLineDetails";
     public static final String API_GR_PO_SUPPLIERS = "PODetailsandGRPOPosting/GetPODetails";
     public static final String API_GET_STOCK= "ProductStockWithWareHouse";
+    public static final String API_GET_CUSTOMER= "getCustomerDetails";
     public static final String API_SALES_ORDER= "SODraft/SODraftPosting";
     public static final String API_GR_PO_POSTING = "PostGRPO/GRPOPosting";
     public static final String API_GR_INTERNAL_POSTING = "ITPosting";
