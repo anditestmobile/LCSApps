@@ -317,7 +317,7 @@ public class QuotationActivity extends BaseActivity {
                 edtCompName = itemView.findViewById(R.id.edtCompanyName);
                 edtMobileNumber = itemView.findViewById(R.id.edtMobileNumber);
                 edtCustomerCode = itemView.findViewById(R.id.edtCustomerCode);
-                edtShipTo = itemView.findViewById(R.id.edtShipTo);
+                edtShipTo = itemView.findViewById(R.id.spShipTo);
                 edtRemarks = itemView.findViewById(R.id.edtRemarks);
 
 //                txtTitle.setText("Are you sure want to checkout?\nSales order confirmation will be emailed to you.");
@@ -482,6 +482,10 @@ public class QuotationActivity extends BaseActivity {
                 TextView edtAmount = itemView.findViewById(R.id.edtAmount);
                 ImageView btnAdd = itemView.findViewById(R.id.btnAdd);
                 ImageView btnRemove = itemView.findViewById(R.id.btnRemove);
+                TextView txtUOM = itemView.findViewById(R.id.txtUOM);
+                if(data.getUomName() != null) {
+                    txtUOM.setText(data.getUomName());
+                }
                 edtAmount.setVisibility(View.GONE);
                 btnAdd.setVisibility(View.GONE);
                 btnRemove.setVisibility(View.GONE);

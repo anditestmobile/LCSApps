@@ -20,6 +20,8 @@ public class SalesOrderRequest {
     private String userId;
     @SerializedName("companyname")
     private String compName;
+    @SerializedName("contactperson")
+    private String contactPerson;
     @SerializedName("Phone")
     private String phone;
     @SerializedName("ShipTo")
@@ -115,5 +117,13 @@ public class SalesOrderRequest {
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
+    }
+
+    public String getContactPerson() {
+        return contactPerson;
+    }
+
+    public void setContactPerson(String contactPerson) {
+        this.contactPerson = contactPerson;
     }
 }

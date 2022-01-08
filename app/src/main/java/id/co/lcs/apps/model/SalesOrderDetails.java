@@ -7,6 +7,8 @@ public class SalesOrderDetails {
     private String itemCode;
     @SerializedName("ItemName")
     private String itemName;
+    @SerializedName("UOM")
+    private String uomName;
     @SerializedName("Qty")
     private String qty;
     @SerializedName("Categories")
@@ -72,5 +74,13 @@ public class SalesOrderDetails {
 
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
+    }
+
+    public String getUomName() {
+        return uomName;
+    }
+
+    public void setUomName(String uomName) {
+        this.uomName = uomName;
     }
 }

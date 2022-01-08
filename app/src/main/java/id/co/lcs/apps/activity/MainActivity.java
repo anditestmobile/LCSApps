@@ -55,7 +55,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
                 .load(getImage("no_profile"))
                 .circleCrop()
                 .into(binding.imgProfile);
-        binding.txtUsername.setText(user.getLastName());
+        binding.txtUsername.setText(user.getFirstName());
 
         binding.layoutProfile.setOnClickListener(new View.OnClickListener() {
             @Override

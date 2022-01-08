@@ -67,22 +67,24 @@ public class BarcodeActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(BarcodeActivity.this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 Helper.removeItemParam(Constants.BAR_CODE);
                 Helper.removeItemParam(Constants.QUOTATION_HISTORY);
             }
         });
         String barcode = Helper.getItemParam(Constants.BAR_CODE).toString();
+        String customerName = Helper.getItemParam(Constants.CUSTOMERNAME).toString();
         Bitmap bitmap = null;
         try {
-            bitmap = QRCodeHelper.encodeAsBitmap(barcode, BarcodeFormat.CODE_128, 600, 300);
+            bitmap = QRCodeHelper.encodeAsBitmap(barcode, BarcodeFormat.CODE_128, 800, 500);
         } catch (WriterException e) {
             e.printStackTrace();
         }
         binding.imgBarcode.setImageBitmap(bitmap);
         binding.txtDate.setText(Helper.todayDate1("MMMM dd, yyyy"));
-        binding.txtOrderID.setText("Draft Number (Quotation) : " + barcode);
+        binding.txtOrderID.setText("Quotation : " + barcode + "\n" + customerName);
 
         binding.cLayout.setDrawingCacheEnabled(true);
         // this is the important code :)
@@ -125,6 +127,17 @@ public class BarcodeActivity extends BaseActivity {
 //        view.draw(canvas);
 //        saveImg(bitmapLayout, barcode);
 //        saveImg(bitmap);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(BarcodeActivity.this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
+                | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        Helper.removeItemParam(Constants.BAR_CODE);
+        Helper.removeItemParam(Constants.QUOTATION_HISTORY);
     }
 
     private void saveLayout(Bitmap bitmapLayout, String barcode) {

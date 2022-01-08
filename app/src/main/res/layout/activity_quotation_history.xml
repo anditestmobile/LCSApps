@@ -57,8 +57,17 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:hint="Input Search...."
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btnSearch"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
+
+        <Button
+            android:id="@+id/btnSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Search"
+            app:layout_constraintBottom_toTopOf="@+id/cv"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
         <androidx.cardview.widget.CardView
@@ -83,15 +92,24 @@
                     android:id="@+id/txtSO"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="50"
+                    android:layout_weight="30"
                     android:gravity="center"
                     android:text="Quotation Number" />
+
+                <TextView
+                    android:id="@+id/textView19"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="40"
+                    android:gravity="center"
+                    android:text="Comp.Name" />
+
                 <TextView
                     android:id="@+id/txtDate"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="5dp"
-                    android:layout_weight="50"
+                    android:layout_weight="30"
                     android:gravity="center"
                     android:text="Date" />
 
@@ -142,7 +160,7 @@
             style="@style/TextAppearance.AppCompat.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="No Good Receipt Found"
+            android:text="No Quotation Found"
             android:textColor="@color/black"
             android:textStyle="bold"/>
 

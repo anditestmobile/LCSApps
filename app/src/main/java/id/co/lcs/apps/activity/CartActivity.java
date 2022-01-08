@@ -20,12 +20,14 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,6 +59,8 @@ import id.co.lcs.apps.constants.Constants;
 import id.co.lcs.apps.databinding.ActivityCartBinding;
 import id.co.lcs.apps.helper.Helper;
 import id.co.lcs.apps.helper.QRCodeHelper;
+import id.co.lcs.apps.model.AutoComplete;
+import id.co.lcs.apps.model.AutoCompleteResponse;
 import id.co.lcs.apps.model.Customer;
 import id.co.lcs.apps.model.CustomerRequest;
 import id.co.lcs.apps.model.CustomerResponse;
@@ -91,9 +95,11 @@ public class CartActivity extends BaseActivity {
     private SalesOrderRequest soRequest;
     private List<Integer> pos = new ArrayList<>();
     private SalesOrderResponse wsResponse;
-    private EditText edtCompName, edtMobileNumber, edtShipTo, edtRemarks;
-    private AutoCompleteTextView edtCustomerCode;
+    private EditText edtCustomerCode, edtMobileNumber, edtRemarks;
+    private AutoCompleteTextView edtCompName;
+    private Spinner spContactPerson, spShipTo;
     private CustomerResponse listCust;
+    private AutoCompleteResponse listAutoCP, listAutoShipTo;
     private int FLAG_CUST = 0;
     private String textCust;
     private SalesOrderRequest updateCart;
@@ -122,8 +128,8 @@ public class CartActivity extends BaseActivity {
 
             for (SalesOrderDetails data : updateCart.getSoItem()) {
                 listProductDetail.add(new ProductDetail("Product Name:", data.getItemName()));
-                Product p = new Product(data.getItemCode(), data.getItemName(), data.getCategories(), data.getImgUrl()
-                        , "0", Double.parseDouble(data.getPrice())*Integer.parseInt(data.getQty().split("\\.")[0])
+                Product p = new Product(data.getItemCode(), data.getItemName(), data.getUomName(), data.getCategories(), data.getImgUrl()
+                        , "0", Double.parseDouble(data.getPrice())
                         , 0, 0, 0, Integer.parseInt(data.getQty().split("\\.")[0])
                         , false, true, listProductDetail, null);
                 listProduct.add(p);
@@ -131,7 +137,7 @@ public class CartActivity extends BaseActivity {
             Helper.setItemParam(Constants.LIST_CART, listProduct);
             Helper.UPDATE_CART = true;
         }
-        if(updateCart != null){
+        if (updateCart != null) {
             binding.btnCheckout.setText("UPDATE");
         }
         productArrayList = (ArrayList<Product>) Helper.getItemParam(Constants.LIST_CART);
@@ -369,15 +375,22 @@ public class CartActivity extends BaseActivity {
                 edtCompName = itemView.findViewById(R.id.edtCompanyName);
                 edtMobileNumber = itemView.findViewById(R.id.edtMobileNumber);
                 edtCustomerCode = itemView.findViewById(R.id.edtCustomerCode);
-                edtShipTo = itemView.findViewById(R.id.edtShipTo);
+                spShipTo = itemView.findViewById(R.id.spShipTo);
                 edtRemarks = itemView.findViewById(R.id.edtRemarks);
+                spContactPerson = itemView.findViewById(R.id.spContactPerson);
 
-                if(updateCart.getQuotation() != null){
+                if (updateCart != null) {
                     edtCustomerCode.setText(updateCart.getCustomerCode());
                     edtMobileNumber.setText(updateCart.getPhone());
                     edtCompName.setText(updateCart.getCompName());
-                    edtShipTo.setText(updateCart.getShipTo());
+                    textCust = updateCart.getCustomerCode();
+                    PARAM = 3;
+                    new RequestUrl().execute();
+                    getProgressDialog().show();
+//                    edtContactPerson.setText(updateCart.getContactPerson());
+//                    edtShipTo.setText(updateCart.getShipTo());
                     edtRemarks.setText(updateCart.getRemarks());
+                    spContactPerson.setEnabled(false);
                     edtCustomerCode.setEnabled(false);
                     edtMobileNumber.setEnabled(false);
                     edtCompName.setEnabled(false);
@@ -392,10 +405,12 @@ public class CartActivity extends BaseActivity {
                             Toast.makeText(getApplicationContext(), "Please fill customer code", Toast.LENGTH_SHORT).show();
                         } else if (edtCompName.getText().toString().isEmpty()) {
                             Toast.makeText(getApplicationContext(), "Please fill company name", Toast.LENGTH_SHORT).show();
+//                        } else if (edtContactPerson.getText().toString().isEmpty()) {
+//                            Toast.makeText(getApplicationContext(), "Please fill contact person", Toast.LENGTH_SHORT).show();
                         } else if (edtMobileNumber.getText().toString().isEmpty()) {
                             Toast.makeText(getApplicationContext(), "Please fill mobile number", Toast.LENGTH_SHORT).show();
-                        } else if (edtShipTo.getText().toString().isEmpty()) {
-                            Toast.makeText(getApplicationContext(), "Please fill Ship To", Toast.LENGTH_SHORT).show();
+//                        }  else if (edtShipTo.getText().toString().isEmpty()) {
+//                            Toast.makeText(getApplicationContext(), "Please fill Ship To", Toast.LENGTH_SHORT).show();
                         } else if (edtRemarks.getText().toString().isEmpty()) {
                             Toast.makeText(getApplicationContext(), "Please fill Remarks", Toast.LENGTH_SHORT).show();
                         } else {
@@ -412,7 +427,7 @@ public class CartActivity extends BaseActivity {
                     }
                 });
 
-                edtCustomerCode.addTextChangedListener(new TextWatcher() {
+                edtCompName.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -427,14 +442,18 @@ public class CartActivity extends BaseActivity {
                     public void afterTextChanged(Editable editable) {
                         if (listCust != null && listCust.getResponseData().size() != 0) {
                             for (Customer temp : listCust.getResponseData()) {
-                                if ((temp.getCustomerCode() + "-" + temp.getName()).equals(editable.toString())) {
-                                    edtCompName.setText(temp.getCompanyName());
+                                if (temp.getCompanyName().equals(editable.toString())) {
+                                    edtCustomerCode.setText(temp.getCustomerCode());
+                                    textCust = temp.getCustomerCode();
+                                    PARAM = 3;
+                                    new RequestUrl().execute();
+                                    getProgressDialog().show();
                                     FLAG_CUST = 1;
                                 }
                             }
                         }
                         if (FLAG_CUST == 0 && editable.toString().length() >= 3) {
-                            edtCompName.setText("");
+                            edtCustomerCode.setText("");
                             textCust = editable.toString();
                             PARAM = 2;
                             new RequestUrl().execute();
@@ -443,6 +462,22 @@ public class CartActivity extends BaseActivity {
                         }
                     }
                 });
+
+//                edtCompName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//                    @Override
+//                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                        listCust.getResponseData().get(position).getCustomerCode();
+//                        PARAM = 3;
+//                        new RequestUrl().execute();
+//                        getProgressDialog().show();
+//                    }
+//
+//                    @Override
+//                    public void onNothingSelected(AdapterView<?> parent) {
+//
+//                    }
+//                });
+
             });
         }
     }
@@ -507,10 +542,10 @@ public class CartActivity extends BaseActivity {
                 edtAmount.setVisibility(View.GONE);
                 txtPrice.setVisibility(View.GONE);
 
-                if(updateCart == null) {
+                if (updateCart == null) {
                     txtTitle.setText("Are you sure want to checkout?");
                     btnYes.setText("CheckOut");
-                }else{
+                } else {
                     txtTitle.setText("Are you sure want to update this quotation?");
                     btnYes.setText("Update");
                 }
@@ -519,9 +554,9 @@ public class CartActivity extends BaseActivity {
                     @Override
                     public void onClick(View view) {
 
-                        if(updateCart == null) {
+                        if (updateCart == null) {
                             setDataInsert();
-                        }else{
+                        } else {
                             setDataUpdate();
                         }
                         PARAM = 1;
@@ -546,20 +581,23 @@ public class CartActivity extends BaseActivity {
         Calendar delDate = Helper.todayDate();
         delDate.add(Calendar.DATE, 2);
         soRequest = new SalesOrderRequest();
-        soRequest.setCustomerCode(edtCustomerCode.getText().toString().split("-")[1]);
+        soRequest.setCustomerCode(edtCustomerCode.getText().toString().split("-")[0]);
         soRequest.setName(edtCompName.getText().toString());
         soRequest.setUserId(user.getFirstName());
         soRequest.setDate(Helper.todayDate1("yyyyMMdd"));
         soRequest.setCompName(edtCompName.getText().toString());
+        soRequest.setContactPerson(listAutoCP.getStatusCode() != 1 ? ""
+                : listAutoCP.getResponseData().get(spContactPerson.getSelectedItemPosition()).getName());
         soRequest.setPhone(edtMobileNumber.getText().toString());
-        soRequest.setShipTo(edtShipTo.getText().toString());
+        soRequest.setShipTo(listAutoShipTo.getStatusCode() != 1 ? ""
+                : listAutoShipTo.getResponseData().get(spShipTo.getSelectedItemPosition()).getName());
         soRequest.setRemarks(edtRemarks.getText().toString());
         soRequest.setDelDate(sdf.format(delDate.getTime()));
-        SalesOrderDetails soDetails = new SalesOrderDetails();
         List<SalesOrderDetails> listSO = new ArrayList<>();
         for (int i = 0; i < productArrayList.size(); i++) {
             if (productArrayList.get(i).isStatusCheckout()) {
                 pos.add(i);
+                SalesOrderDetails soDetails = new SalesOrderDetails();
                 soDetails.setItemCode(productArrayList.get(i).getProductCode());
                 soDetails.setItemName(productArrayList.get(i).getProductName());
                 soDetails.setPrice(String.valueOf(productArrayList.get(i).getPrice()));
@@ -577,20 +615,23 @@ public class CartActivity extends BaseActivity {
         delDate.add(Calendar.DATE, 2);
         soRequest = new SalesOrderRequest();
         soRequest.setQuotation(updateCart.getQuotation());
-        soRequest.setCustomerCode(edtCustomerCode.getText().toString().split("-")[1]);
+        soRequest.setCustomerCode(edtCustomerCode.getText().toString().split("-")[0]);
         soRequest.setName(edtCompName.getText().toString());
         soRequest.setUserId(user.getFirstName());
         soRequest.setDate(Helper.todayDate1("yyyyMMdd"));
         soRequest.setCompName(edtCompName.getText().toString());
+        soRequest.setContactPerson(listAutoCP.getStatusCode() != 1 ? ""
+                : listAutoCP.getResponseData().get(spContactPerson.getSelectedItemPosition()).getName());
         soRequest.setPhone(edtMobileNumber.getText().toString());
-        soRequest.setShipTo(edtShipTo.getText().toString());
+        soRequest.setShipTo(listAutoShipTo.getStatusCode() != 1 ? ""
+                : listAutoShipTo.getResponseData().get(spShipTo.getSelectedItemPosition()).getName());
         soRequest.setRemarks(edtRemarks.getText().toString());
         soRequest.setDelDate(sdf.format(delDate.getTime()));
-        SalesOrderDetails soDetails = new SalesOrderDetails();
         List<SalesOrderDetails> listSO = new ArrayList<>();
         for (int i = 0; i < productArrayList.size(); i++) {
             if (productArrayList.get(i).isStatusCheckout()) {
                 pos.add(i);
+                SalesOrderDetails soDetails = new SalesOrderDetails();
                 soDetails.setItemCode(productArrayList.get(i).getProductCode());
                 soDetails.setItemName(productArrayList.get(i).getProductName());
                 soDetails.setPrice(String.valueOf(productArrayList.get(i).getPrice()));
@@ -615,6 +656,7 @@ public class CartActivity extends BaseActivity {
                 RecyclerView rvProductDetail = itemView.findViewById(R.id.rvProductDetail);
                 TextView txtShowMore = itemView.findViewById(R.id.txtShowMore);
                 TextView labelBarcode = itemView.findViewById(R.id.labelBarcode);
+                TextView txtUOM = itemView.findViewById(R.id.txtUOM);
 
                 TextView edtAmount = itemView.findViewById(R.id.edtAmount);
                 ImageView btnAdd = itemView.findViewById(R.id.btnAdd);
@@ -622,8 +664,13 @@ public class CartActivity extends BaseActivity {
                 edtAmount.setVisibility(View.GONE);
                 btnAdd.setVisibility(View.GONE);
                 btnRemove.setVisibility(View.GONE);
+                txtUOM.setVisibility(View.GONE);
 
                 showMoreDetail(data);
+
+                if(data.getUomName() != null) {
+                    txtUOM.setText(data.getUomName());
+                }
 
                 double price = data.getPrice();
                 txtPrice.setText("S$" + String.format("%.2f", price));
@@ -720,12 +767,26 @@ public class CartActivity extends BaseActivity {
                     final String url = Helper.getItemParam(Constants.BASE_URL).toString().concat(URL_SALES_ORDER);
                     wsResponse = (SalesOrderResponse) Helper.postWebservice(url, soRequest, SalesOrderResponse.class);
                     return null;
-                } else {
+                } else if (PARAM == 2) {
                     String URL_CUSTOMER = Constants.API_PREFIX + Constants.API_GET_CUSTOMER;
                     final String url = Helper.getItemParam(Constants.BASE_URL).toString().concat(URL_CUSTOMER);
                     CustomerRequest customerRequest = new CustomerRequest();
                     customerRequest.setCustomer(textCust);
                     listCust = (CustomerResponse) Helper.postWebservice(url, customerRequest, CustomerResponse.class);
+                    return null;
+                } else if (PARAM == 3) {
+                    String URL_CONTACT_PERSON = Constants.API_PREFIX + Constants.API_GET_CONTACT_PERSON;
+                    final String url = Helper.getItemParam(Constants.BASE_URL).toString().concat(URL_CONTACT_PERSON);
+                    CustomerRequest customerRequest = new CustomerRequest();
+                    customerRequest.setCustomer(textCust);
+                    listAutoCP = (AutoCompleteResponse) Helper.postWebservice(url, customerRequest, AutoCompleteResponse.class);
+                    return null;
+                } else {
+                    String URL_SHIP_TO = Constants.API_PREFIX + Constants.API_GET_SHIP_TO;
+                    final String url = Helper.getItemParam(Constants.BASE_URL).toString().concat(URL_SHIP_TO);
+                    CustomerRequest customerRequest = new CustomerRequest();
+                    customerRequest.setCustomer(textCust);
+                    listAutoShipTo = (AutoCompleteResponse) Helper.postWebservice(url, customerRequest, AutoCompleteResponse.class);
                     return null;
                 }
             } catch (Exception ex) {
@@ -782,22 +843,31 @@ public class CartActivity extends BaseActivity {
                     }
                     bottomSheetDialog.dismiss();
                 }
-            } else {
+            } else if (PARAM == 2) {
                 if (listCust != null) {
                     if (listCust.getStatusCode() == 1) {
                         setCustomer(listCust);
                     }
-//                    else {
-//                        Toast.makeText(getApplicationContext(), listCust.getStatusMessage(), Toast.LENGTH_SHORT).show();
-//                    }
                 }
-//                else {
-//                    if (Helper.getItemParam(Constants.INTERNAL_SERVER_ERROR) != null) {
-//                        Toast.makeText(getApplicationContext(), Helper.getItemParam(Constants.INTERNAL_SERVER_ERROR).toString(), Toast.LENGTH_SHORT).show();
-//                    } else {
-//                        Toast.makeText(getApplicationContext(), listCust.getStatusMessage(), Toast.LENGTH_SHORT).show();
-//                    }
-//                }
+            } else if (PARAM == 3) {
+                if (listAutoCP != null) {
+                    if (listAutoCP.getStatusCode() == 1) {
+                        setAutoCP();
+                    }else{
+                        setAutoCP();
+                    }
+                }
+                PARAM = 4;
+                new RequestUrl().execute();
+            } else {
+                if (listAutoShipTo != null) {
+                    if (listAutoShipTo.getStatusCode() == 1) {
+                        setAutoShipTo();
+                    }else{
+                        setAutoShipTo();
+                    }
+                }
+                getProgressDialog().dismiss();
             }
         }
 
@@ -806,13 +876,52 @@ public class CartActivity extends BaseActivity {
     private void setCustomer(CustomerResponse listCust) {
         String[] cust = new String[listCust.getResponseData().size()];
         for (int i = 0; i < listCust.getResponseData().size(); i++) {
-            cust[i] = listCust.getResponseData().get(i).getCustomerCode() + "-" + listCust.getResponseData().get(i).getName();
+            cust[i] = listCust.getResponseData().get(i).getCompanyName();
         }
 
         ArrayAdapter adapter = new
                 ArrayAdapter(this, R.layout.list_customer, R.id.item, cust);
-        edtCustomerCode.setAdapter(adapter);
-        edtCustomerCode.showDropDown();
+        edtCompName.setAdapter(adapter);
+        edtCompName.showDropDown();
+    }
+
+    private void setAutoShipTo() {
+        String[] shipTo = new String[listAutoShipTo.getResponseData().size()];
+        for (int i = 0; i < listAutoShipTo.getResponseData().size(); i++) {
+            shipTo[i] = listAutoShipTo.getResponseData().get(i).getName();
+        }
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter(this,
+                android.R.layout.simple_spinner_item, shipTo);
+        spShipTo.setAdapter(arrayAdapter);
+        if(updateCart != null){
+            for(int i = 0; i<shipTo.length;i++){
+                if(shipTo[i].equals(updateCart.getShipTo())){
+                    spShipTo.setSelection(i);
+                    break;
+                }
+            }
+        }
+    }
+
+    private void setAutoCP() {
+        String[] cp = new String[listAutoCP.getResponseData().size()];
+        for (int i = 0; i < listAutoCP.getResponseData().size(); i++) {
+            cp[i] = listAutoCP.getResponseData().get(i).getName();
+        }
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter(this,
+                android.R.layout.simple_spinner_item, cp);
+        spContactPerson.setAdapter(arrayAdapter);
+
+        if(updateCart != null){
+            for(int i = 0; i<cp.length;i++){
+                if(cp[i].equals(updateCart.getContactPerson())){
+                    spContactPerson.setSelection(i);
+                    break;
+                }
+            }
+        }
     }
 
     private void onDone() {
@@ -829,6 +938,7 @@ public class CartActivity extends BaseActivity {
         }
         Helper.setItemParam(Constants.LIST_CART, productArrayList);
         Helper.setItemParam(Constants.BAR_CODE, wsResponse.getResponseData().getDocNum());
+        Helper.setItemParam(Constants.CUSTOMERNAME, edtCompName.getText().toString());
         Intent intent = new Intent(CartActivity.this, BarcodeActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);

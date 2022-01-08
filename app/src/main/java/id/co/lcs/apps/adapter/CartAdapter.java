@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import id.co.lcs.apps.R;
 import id.co.lcs.apps.activity.CartActivity;
 import id.co.lcs.apps.databinding.RowViewCart1Binding;
+import id.co.lcs.apps.helper.Helper;
 import id.co.lcs.apps.model.Product;
 
 /**
@@ -49,6 +50,28 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.DataObjectHold
         DataObjectHolder(RowViewCart1Binding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            binding.edtAmount.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    if(!editable.toString().isEmpty()) {
+                        mDataSet.get((Integer) binding.edtAmount.getTag()).setQty(Integer.parseInt(editable.toString().trim()));
+                        binding.txtPrice.setText("$" + Helper.doubleToStringNoDecimal(Integer.parseInt(editable.toString())
+                                * mDataSet.get((Integer) binding.edtAmount.getTag()).getPrice()));
+                    }else{
+                        mDataSet.get((Integer) binding.edtAmount.getTag()).setQty(0);
+                    }
+                }
+            });
         }
 
     }
@@ -75,6 +98,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.DataObjectHold
 
 //        holder.binding.txtPrice.setText("$10");
         holder.binding.txtShowMore.setText(Html.fromHtml("<u>" + "Show more" + "</u>"));
+        if(data.getUomName() != null){
+            holder.binding.txtUOM.setText(data.getUomName());
+        }
 
         /*product detail*/
         holder.binding.rvProductDetail.setLayoutManager(new LinearLayoutManager(mContext));
@@ -96,8 +122,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.DataObjectHold
 
 //        double price = 88;
 //        holder.binding.txtPrice.setText("$" + price);
+        holder.binding.edtAmount.setTag(position);
         holder.binding.edtAmount.setText(String.valueOf(data.getQty()));
-        holder.binding.txtPrice.setText("S$"+ String.format("%.2f",data.getQty() * data.getPrice()));
+        holder.binding.txtPrice.setText("$"+ String.format("%.2f",data.getQty() * data.getPrice()));
         holder.binding.checkBoxCart.setChecked(data.isStatusCheckout());
 
         final int[] amount = {data.getQty()};
@@ -107,7 +134,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.DataObjectHold
                 if (amount[0] >= 1) {
                     amount[0]++;
                     holder.binding.edtAmount.setText(String.valueOf(amount[0]));
-                    holder.binding.txtPrice.setText("S$" + String.format("%.2f",amount[0] * data.getPrice()));
+                    holder.binding.txtPrice.setText("$" + String.format("%.2f",amount[0] * data.getPrice()));
                     data.setQty(amount[0]);
 //                    data.setPrice(Double.parseDouble(String.valueOf(amount[0] * price)));
                     mContext.updateTotalChart(data);
@@ -122,7 +149,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.DataObjectHold
                 if (amount[0] != 1) {
                     amount[0]--;
                     holder.binding.edtAmount.setText(String.valueOf(amount[0]));
-                    holder.binding.txtPrice.setText("S$" + String.format("%.2f",amount[0] * data.getPrice()));
+                    holder.binding.txtPrice.setText("$" + String.format("%.2f",amount[0] * data.getPrice()));
                     data.setQty(amount[0]);
 //                    data.setPrice(Double.parseDouble(String.valueOf(amount[0] * price)));
                     mContext.updateTotalChart(data);
@@ -155,27 +182,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.DataObjectHold
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 mContext.showPreview(data);
                 return false;
-            }
-        });
-
-        holder.binding.edtAmount.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if(!editable.toString().isEmpty()) {
-                    data.setQty(Integer.parseInt(editable.toString().trim()));
-                }else{
-                    data.setQty(0);
-                }
             }
         });
     }

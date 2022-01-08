@@ -50,6 +50,7 @@ public class InventoryMenuActivity extends BaseActivity implements AdapterView.O
     }
 
     private void initialize() {
+        binding.txtUsername.setText(user.getFirstName());
         wh = (String) Helper.getItemParam(Constants.WAREHOUSE);
         binding.txtWh.setText(wh);
 

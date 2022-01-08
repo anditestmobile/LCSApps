@@ -31,6 +31,7 @@ import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import id.co.lcs.apps.R;
 import id.co.lcs.apps.activity.PreviewImageActivity;
@@ -43,6 +44,10 @@ import id.co.lcs.apps.model.ProductDetail;
 import id.co.lcs.apps.adapter.ProductDetailAdapter;
 import id.co.lcs.apps.model.ProductResponse;
 import id.co.lcs.apps.model.SearchWithProductCode;
+import id.co.lcs.apps.model.StockDetailsReponse;
+import id.co.lcs.apps.model.StockDetailsRequest;
+import id.co.lcs.apps.model.WMDetailStock;
+import id.co.lcs.apps.model.WMStock;
 import id.co.lcs.apps.utils.Utils;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
@@ -54,6 +59,9 @@ public class ScannerFragment extends BaseFragment implements ZXingScannerView.Re
     private Product product = new Product();
     public int PARAM = 0;
     public String barcodeResult="";
+    private String itemCode;
+    private Product dataInventory;
+    private StockDetailsReponse sdResponse = new StockDetailsReponse();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -100,6 +108,14 @@ public class ScannerFragment extends BaseFragment implements ZXingScannerView.Re
         getProgressDialog().show();
     }
 
+    public void getInventoryStock(Product data) {
+        itemCode = data.getProductCode();
+        dataInventory = data;
+        PARAM = 1;
+        new RequestUrl().execute();
+        getProgressDialog().show();
+    }
+
     private class RequestUrl extends AsyncTask<Void, Void, ProductResponse> {
 
         @Override
@@ -112,6 +128,12 @@ public class ScannerFragment extends BaseFragment implements ZXingScannerView.Re
                     sc.setProductCode(barcodeResult);
                     return (ProductResponse) Helper.postWebservice(url, sc, ProductResponse.class);
                 }else{
+                    String URL_STOCK_DETAILS = Constants.API_PREFIX + Constants.API_GET_STOCK;
+                    final String url = Helper.getItemParam(Constants.BASE_URL).toString().concat(URL_STOCK_DETAILS);
+                    StockDetailsRequest sd = new StockDetailsRequest();
+                    sd.setBarcode("");
+                    sd.setItemCode(itemCode);
+                    sdResponse = (StockDetailsReponse) Helper.postWebservice(url, sd, StockDetailsReponse.class);
                     return null;
                 }
             } catch (Exception ex) {
@@ -136,7 +158,8 @@ public class ScannerFragment extends BaseFragment implements ZXingScannerView.Re
                         productArrayList = new ArrayList<>();
                         productArrayList = p.getResponseData();
                         product = productArrayList.get(0);
-                        showDialogAddToCart(product);
+                        getInventoryStock(product);
+//                        showDialogAddToCart(product);
                     }else{
                         Toast.makeText(getActivity(), p.getStatusMessage(), Toast.LENGTH_SHORT).show();
                         resumeScanner();
@@ -149,7 +172,20 @@ public class ScannerFragment extends BaseFragment implements ZXingScannerView.Re
                     }
                 }
             }else{
-
+                getProgressDialog().dismiss();
+                if (sdResponse != null) {
+                    if (sdResponse.getStatusCode() == 1) {
+                        showDialogAddToCart(dataInventory);
+                    } else {
+                        Toast.makeText(getActivity(), sdResponse.getStatusMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    if (Helper.getItemParam(Constants.INTERNAL_SERVER_ERROR) != null) {
+                        Toast.makeText(getActivity(), Helper.getItemParam(Constants.INTERNAL_SERVER_ERROR).toString(), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getActivity(), sdResponse.getStatusMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
         }
 
@@ -198,6 +234,10 @@ public class ScannerFragment extends BaseFragment implements ZXingScannerView.Re
                 EditText edtAmount = itemView.findViewById(R.id.edtAmount);
                 ImageView btnAdd = itemView.findViewById(R.id.btnAdd);
                 ImageView btnRemove = itemView.findViewById(R.id.btnRemove);
+                TextView txtUOM = itemView.findViewById(R.id.txtUOM);
+                if(data.getUomName() != null) {
+                    txtUOM.setText(data.getUomName());
+                }
 
 
                 imgProduct.setOnTouchListener(new View.OnTouchListener() {
@@ -296,15 +336,20 @@ public class ScannerFragment extends BaseFragment implements ZXingScannerView.Re
                 txtShowMore.setOnClickListener(view -> {
 
                     if (!expanded[0]) {
-                        Glide.with(getContext())
-                                .load("https://laptopnesia.com/wp-content/uploads/2019/01/Cara-Membuat-Barcode-5-1.jpg")
-                                .into(imgBarcode);
+                        expanded[0] = true;
+//                        Glide.with(getContext())
+//                                .load("https://laptopnesia.com/wp-content/uploads/2019/01/Cara-Membuat-Barcode-5-1.jpg")
+//                                .into(imgBarcode);
 //                        labelBarcode.setVisibility(View.VISIBLE);
 //                        imgBarcode.setVisibility(View.VISIBLE);
                         txtShowMore.setText(Html.fromHtml("<u>" + "Show less" + "</u>"));
-
-                        showMoreDetail(data);
-                        expanded[0] = true;
+                        for(WMStock stock : sdResponse.getResponseData()){
+                            if(stock.getIdMaterial().equals(itemCode)){
+                                showMoreDetail(stock.getDetailStocks());
+                                break;
+                            }
+                        }
+//                        showMoreDetail(data);
                     } else {
                         int i[] = {2};
                         if (productDetailArrayList.size() - 1 == i[i.length - 1]) {
@@ -326,20 +371,44 @@ public class ScannerFragment extends BaseFragment implements ZXingScannerView.Re
         }
     }
 
-    private void showMoreDetail(Product data) {
+//    private void showMoreDetail(Product data) {
+//        ProductDetail detail = new ProductDetail();
+//        String detailStock = "";
+////        for(int i=0; i<2; i++){
+////            if(i != 0){
+////                detailStock = detailStock + "\nWarehouse " + i + " : " + 1+i;
+////            }else{
+////                detailStock = "Warehouse " + i + " : " + 1+i;
+////            }
+////
+////        }
+//        detail.setValue("In Stock : " + data.getInStock());
+//        detail.setLabel("Inventory Details");
+////        detail.setValue(detailStock);
+//        productDetailArrayList.add(detail);
+//        productDetailAdapter.notifyItemInserted(3);
+//    }
+
+    private void showMoreDetail(List<WMDetailStock> data) {
         ProductDetail detail = new ProductDetail();
-        String detailStock = "";
-//        for(int i=0; i<2; i++){
-//            if(i != 0){
-//                detailStock = detailStock + "\nWarehouse " + i + " : " + 1+i;
-//            }else{
-//                detailStock = "Warehouse " + i + " : " + 1+i;
-//            }
-//
-//        }
-        detail.setValue("In Stock : " + data.getInStock());
+        String detailStock = null;
+        int temp = 0;
+        for (int i = 0; i < data.size(); i++) {
+            if (data.get(i).getAvailableQty().equals("0")) {
+                continue;
+            }
+            if (temp != 0) {
+                detailStock = detailStock + "\nWhs " + data.get(i).getWhs() + " : " + data.get(i).getAvailableQty();
+            } else {
+                detailStock = "Whs " + data.get(i).getWhs() + " : " + data.get(i).getAvailableQty();
+            }
+            temp++;
+        }
+        if (detailStock == null) {
+            detailStock = "No Stock";
+        }
         detail.setLabel("Inventory Details");
-//        detail.setValue(detailStock);
+        detail.setValue(detailStock);
         productDetailArrayList.add(detail);
         productDetailAdapter.notifyItemInserted(3);
     }

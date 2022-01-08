@@ -507,6 +507,10 @@ public class HomeFragment extends BaseFragment {
                 EditText edtAmount = itemView.findViewById(R.id.edtAmount);
                 ImageView btnAdd = itemView.findViewById(R.id.btnAdd);
                 ImageView btnRemove = itemView.findViewById(R.id.btnRemove);
+                TextView txtUOM = itemView.findViewById(R.id.txtUOM);
+                if(data.getUomName() != null) {
+                    txtUOM.setText(data.getUomName());
+                }
 //                int temp = 0;
 //                for (WMDetailStock stock : sdResponse.getResponseData().get(0).getDetailStocks()) {
 //                    if (stock.getAvailableQty().equals("0")) {

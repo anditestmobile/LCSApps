@@ -77,7 +77,8 @@
             android:id="@+id/txtOrderID"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Draft Number (Quotation) : 000000"
+            android:gravity="center"
+            android:text="Draft Number (Quotation)\n000000"
             android:textColor="#000000" />
 
     </LinearLayout>
@@ -87,14 +88,14 @@
         android:id="@+id/textView15"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
         android:layout_marginStart="30dp"
         android:layout_marginLeft="30dp"
         android:layout_marginEnd="30dp"
         android:layout_marginRight="30dp"
         android:layout_marginBottom="30dp"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="bottom"
         android:gravity="center"
-        android:text="This Bar Code is automatically saved to your photo galery"
+        android:text="This Bar Code is automatically saved to your photo gallery"
         android:textColor="#000000" />
 </RelativeLayout>

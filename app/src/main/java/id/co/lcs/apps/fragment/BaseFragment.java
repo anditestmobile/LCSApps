@@ -75,7 +75,7 @@ public class BaseFragment extends Fragment {
                             listProduct = new ArrayList<>();
 //                            data.setQty(1);
                             data.setStatusCheckout(true);
-                            Product p = new Product(data.getProductCode(),data.getProductName(),data.getProductCategory(),data.getImageUrl()
+                            Product p = new Product(data.getProductCode(),data.getProductName(), data.getUomName(),data.getProductCategory(),data.getImageUrl()
                                     ,data.getInStock(),data.getPrice(),data.getTotaIndex(),data.getRowNumber(),data.getSalesAmt(),data.getQty()
                                     ,data.isWishList(),data.isStatusCheckout(),data.getProductDetailArrayList(),data.getProductDetailArrayListMore());
                             listProduct.add(p);

@@ -51,22 +51,32 @@ public class QuotationHistoryActivity extends BaseActivity {
     private void initialize() {
         quotationList = new ArrayList<>();
 
-        binding.edtSearchGR.addTextChangedListener(new TextWatcher() {
+//        binding.edtSearchGR.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable editable) {
+//                filter(editable.toString());
+//            }
+//        });
+
+        binding.btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                filter(editable.toString());
+            public void onClick(View v) {
+                PARAM = 1;
+                new RequestUrl().execute();
+                getProgressDialog().show();
             }
         });
+
         binding.btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -126,15 +136,15 @@ public class QuotationHistoryActivity extends BaseActivity {
                     final String url = Helper.getItemParam(Constants.BASE_URL).toString().concat(URL_QUO);
                     QuotationRequest c = new QuotationRequest();
                     c.setQuotation("");
-                    c.setDate("");
+                    c.setDate(Helper.todayDate1("yyyyMMdd"));
                     return (QuotationResponse) Helper.postWebservice(url, c, QuotationResponse.class);
                 }else{
-//                    String URL_GR = Constants.API_PREFIX + Constants.API_GR_PO_DETAILS;
-//                    final String url = Helper.getItemParam(Constants.BASE_URL).toString().concat(URL_GR);
-//                    GRDetailRequest c = new GRDetailRequest();
-//                    c.setGrNo(goodReceipt.getGRNumber());
-//                    grDetail = (GRDetailResponse) Helper.postWebservice(url, c, GRDetailResponse.class);
-                    return null;
+                    String URL_QUO = Constants.API_PREFIX + Constants.API_GET_QUOTATION;
+                    final String url = Helper.getItemParam(Constants.BASE_URL).toString().concat(URL_QUO);
+                    QuotationRequest c = new QuotationRequest();
+                    c.setQuotation(binding.edtSearchGR.getText().toString());
+                    c.setDate("");
+                    return (QuotationResponse) Helper.postWebservice(url, c, QuotationResponse.class);
                 }
             } catch (Exception ex) {
                 if (ex.getMessage() != null) {
@@ -151,7 +161,7 @@ public class QuotationHistoryActivity extends BaseActivity {
 
         @Override
         protected void onPostExecute(QuotationResponse quo) {
-            if (PARAM == 0) {
+//            if (PARAM == 0) {
                 getProgressDialog().dismiss();
                 if(quo != null){
                     if(quo.getStatusCode() == 1) {
@@ -161,18 +171,21 @@ public class QuotationHistoryActivity extends BaseActivity {
                     }else{
                         Toast.makeText(getApplicationContext(), quo.getStatusMessage(), Toast.LENGTH_SHORT).show();
                         binding.emptyLayout.setVisibility(View.VISIBLE);
-                        binding.clGR.setVisibility(View.GONE);
+                        binding.cv.setVisibility(View.GONE);
+                        binding.rcGR.setVisibility(View.GONE);
                     }
                 } else {
                     binding.emptyLayout.setVisibility(View.VISIBLE);
                     binding.clGR.setVisibility(View.GONE);
+                    binding.cv.setVisibility(View.GONE);
+                    binding.rcGR.setVisibility(View.GONE);
                     if (Helper.getItemParam(Constants.INTERNAL_SERVER_ERROR) != null) {
                         Toast.makeText(getApplicationContext(), Helper.getItemParam(Constants.INTERNAL_SERVER_ERROR).toString(), Toast.LENGTH_SHORT).show();
                     }else{
                         Toast.makeText(getApplicationContext(), quo.getStatusMessage(), Toast.LENGTH_SHORT).show();
                     }
-                }
-            }else{
+//                }
+//            }else{
 //                getProgressDialog().dismiss();
 //                if(grDetail != null){
 //                    if(grDetail.getStatusCode() == 1) {
@@ -207,6 +220,8 @@ public class QuotationHistoryActivity extends BaseActivity {
 //        }
         binding.emptyLayout.setVisibility(View.GONE);
         binding.clGR.setVisibility(View.VISIBLE);
+        binding.cv.setVisibility(View.VISIBLE);
+        binding.rcGR.setVisibility(View.VISIBLE);
         adapter = new QuotationHistoryAdapter(QuotationHistoryActivity.this,quotationList);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(QuotationHistoryActivity.this);

@@ -14,6 +14,8 @@ public class Product implements Serializable {
     private String productCode;
     @SerializedName("ItemName")
     private String productName;
+    @SerializedName("UomName")
+    private String uomName;
     @SerializedName("Category")
     private String productCategory;
     @SerializedName("ImgURL")
@@ -38,9 +40,10 @@ public class Product implements Serializable {
     public Product() {
     }
 
-    public Product(String productCode, String productName, String productCategory, String imageUrl, String inStock, double price, int totaIndex, int rowNumber, double salesAmt, int qty, boolean wishList, boolean statusCheckout, ArrayList<ProductDetail> productDetailArrayList, ArrayList<ProductDetail> productDetailArrayListMore) {
+    public Product(String productCode, String productName, String uomName, String productCategory, String imageUrl, String inStock, double price, int totaIndex, int rowNumber, double salesAmt, int qty, boolean wishList, boolean statusCheckout, ArrayList<ProductDetail> productDetailArrayList, ArrayList<ProductDetail> productDetailArrayListMore) {
         this.productCode = productCode;
         this.productName = productName;
+        this.uomName = uomName;
         this.productCategory = productCategory;
         this.imageUrl = imageUrl;
         this.inStock = inStock;
@@ -163,5 +166,13 @@ public class Product implements Serializable {
 
     public void setSalesAmt(double salesAmt) {
         this.salesAmt = salesAmt;
+    }
+
+    public String getUomName() {
+        return uomName;
+    }
+
+    public void setUomName(String uomName) {
+        this.uomName = uomName;
     }
 }

@@ -38,6 +38,8 @@ public class Constants {
     public static final String API_TRANSFER_POSTING = "ITR/ITPosting";
     public static final String API_GR_INTERNAL = "IT/getInventoryTransfer";
     public static final String API_GET_QUOTATION = "GetQuotation";
+    public static final String API_GET_CONTACT_PERSON = "getContactPerson";
+    public static final String API_GET_SHIP_TO = "getShiptTo";
     public static final String API_GR_PO = "GRPO/getGRPODetails";
     public static final String API_GR_PO_DETAILS = "GRPOLine/getGRPOLineDetails";
     public static final String API_GR_PO_SUPPLIERS = "PODetailsandGRPOPosting/GetPODetails";
@@ -54,8 +56,8 @@ public class Constants {
     public static final String URL_IMAGE_3 = "http://58.185.191.42:6868/LCS_BNR03.jpg";
     public static final String URL_IMAGE_4 = "http://58.185.191.42:6868/LCS_BNR04.jpg";
 
-//    public static final String BASE_URL = "http://58.185.191.42:6868";
-    public static final String BASE_URL = "http://58.185.191.42:6870";
+    public static final String BASE_URL = "http://58.185.191.42:6868";
+//    public static final String BASE_URL = "http://58.185.191.42:6870";
 
     public static final int CONNECTION_TIMEOUT = 10; // 10 seconds
     public static final int READ_TIMEOUT = 60;
@@ -84,5 +86,6 @@ public class Constants {
     public static final String LIST_BATCH = "LIST BATCH";
     public static final String LIST_SN = "LIST SN";
     public static final String BAR_CODE = "barcode";
+    public static final String CUSTOMERNAME = "customer name";
     public static final String PARAM_POS_SCAN = "PARAM POS SCAN";
 }

@@ -65,8 +65,19 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.50121653" />
 
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="Company Name"
+        android:textColor="@color/colorPrimary"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/edtCompanyName"
+        app:layout_constraintTop_toBottomOf="@+id/labelTitle" />
+
     <AutoCompleteTextView
-        android:id="@+id/edtCustomerCode"
+        android:id="@+id/edtCompanyName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
@@ -74,61 +85,127 @@
         android:layout_marginEnd="5dp"
         android:layout_marginRight="5dp"
         android:ems="10"
-        android:hint="Customer Code"
-        android:inputType="textPersonName"
-        android:imeOptions="actionNext"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/labelTitle" />
-
-    <EditText
-        android:id="@+id/edtCompanyName"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:ems="10"
         android:hint="Company Name"
         android:imeOptions="actionNext"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="@+id/edtCustomerCode"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView13" />
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="Customer Code"
+        android:textColor="@color/colorPrimary"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/edtCompanyName"
+        app:layout_constraintTop_toBottomOf="@+id/edtCompanyName" />
+
+    <EditText
+        android:id="@+id/edtCustomerCode"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:enabled="false"
+        android:hint="Customer Code"
+        android:imeOptions="actionNext"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="@+id/edtCompanyName"
+        app:layout_constraintStart_toStartOf="@+id/edtCompanyName"
+        app:layout_constraintTop_toBottomOf="@+id/textView14" />
+
+    <TextView
+        android:id="@+id/textView15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="Contact Person"
+        android:textColor="@color/colorPrimary"
+        android:textSize="12sp"
         app:layout_constraintStart_toStartOf="@+id/edtCustomerCode"
         app:layout_constraintTop_toBottomOf="@+id/edtCustomerCode" />
+
+    <Spinner
+        android:id="@+id/spContactPerson"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:spinnerMode="dropdown"
+        style="@style/SpinnerTheme"
+        app:layout_constraintEnd_toEndOf="@+id/edtCustomerCode"
+        app:layout_constraintStart_toStartOf="@+id/edtCustomerCode"
+        app:layout_constraintTop_toBottomOf="@+id/textView15" />
+
+    <TextView
+        android:id="@+id/textView16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="Mobile Number"
+        android:textColor="@color/colorPrimary"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/spContactPerson"
+        app:layout_constraintTop_toBottomOf="@+id/spContactPerson" />
 
     <EditText
         android:id="@+id/edtMobileNumber"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
         android:ems="10"
-        android:hint="Contact Person"
+        android:hint="Mobile Number"
         android:imeOptions="actionNext"
         android:inputType="phone"
-        app:layout_constraintEnd_toEndOf="@+id/edtCompanyName"
-        app:layout_constraintStart_toStartOf="@+id/edtCompanyName"
-        app:layout_constraintTop_toBottomOf="@+id/edtCompanyName" />
+        app:layout_constraintEnd_toEndOf="@+id/spContactPerson"
+        app:layout_constraintStart_toStartOf="@+id/spContactPerson"
+        app:layout_constraintTop_toBottomOf="@+id/textView16" />
 
-    <EditText
-        android:id="@+id/edtShipTo"
-        android:layout_width="0dp"
+    <TextView
+        android:id="@+id/textView17"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:ems="10"
-        android:hint="Ship To"
-        android:imeOptions="actionNext"
-        app:layout_constraintEnd_toEndOf="@+id/edtMobileNumber"
+        android:text="Ship To"
+        android:textColor="@color/colorPrimary"
+        android:textSize="12sp"
         app:layout_constraintStart_toStartOf="@+id/edtMobileNumber"
         app:layout_constraintTop_toBottomOf="@+id/edtMobileNumber" />
+
+    <Spinner
+        android:id="@+id/spShipTo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:spinnerMode="dropdown"
+        style="@style/SpinnerTheme"
+        app:layout_constraintEnd_toEndOf="@+id/edtMobileNumber"
+        app:layout_constraintStart_toStartOf="@+id/edtMobileNumber"
+        app:layout_constraintTop_toBottomOf="@+id/textView17" />
+
+    <TextView
+        android:id="@+id/textView18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="Remarks"
+        android:textColor="@color/colorPrimary"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/spShipTo"
+        app:layout_constraintTop_toBottomOf="@+id/spShipTo" />
 
     <EditText
         android:id="@+id/edtRemarks"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
         android:ems="10"
         android:hint="Remarks"
+        android:inputType="textPersonName"
         android:imeOptions="actionDone"
-        app:layout_constraintEnd_toEndOf="@+id/edtShipTo"
-        app:layout_constraintStart_toStartOf="@+id/edtShipTo"
-        app:layout_constraintTop_toBottomOf="@+id/edtShipTo" />
+        app:layout_constraintEnd_toEndOf="@+id/spShipTo"
+        app:layout_constraintStart_toStartOf="@+id/spShipTo"
+        app:layout_constraintTop_toBottomOf="@+id/textView18" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

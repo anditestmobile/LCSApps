@@ -22,15 +22,23 @@
             android:id="@+id/txtQuoNo"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="50"
+            android:layout_weight="30"
             android:gravity="center"
             android:text="1234567" />
+
+        <TextView
+            android:id="@+id/txtCompName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="40"
+            android:text="MARINA SANDS LTE LTD" />
+
         <TextView
             android:id="@+id/txtDate"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
-            android:layout_weight="50"
+            android:layout_weight="30"
             android:gravity="center"
             android:text="01" />
 

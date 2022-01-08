@@ -48,6 +48,7 @@ public class QuotationHistoryAdapter extends RecyclerView.Adapter<QuotationHisto
         final SalesOrderRequest data = dataList.get(position);
         holder.binding.txtQuoNo.setText(data.getQuotation());
         holder.binding.txtDate.setText(Helper.changeFormatDate("yyyyMMdd", "dd-MM-yyyy", data.getDate()));
+        holder.binding.txtCompName.setText(data.getCompName());
         holder.binding.rootCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
