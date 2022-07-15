@@ -62,7 +62,7 @@ public class QuotationActivity extends BaseActivity {
     private SalesOrderRequest soRequest;
     private List<Integer> pos = new ArrayList<>();
     private SalesOrderResponse wsResponse;
-    private EditText edtCompName, edtMobileNumber, edtCustomerCode, edtShipTo, edtRemarks;
+    private EditText edtCompName, edtMobileNumber, edtCustomerCode, edtShipTo, edtRemarks, edtDelRemark;
     private SalesOrderRequest quotation;
 
     @Override
@@ -319,6 +319,7 @@ public class QuotationActivity extends BaseActivity {
                 edtCustomerCode = itemView.findViewById(R.id.edtCustomerCode);
                 edtShipTo = itemView.findViewById(R.id.spShipTo);
                 edtRemarks = itemView.findViewById(R.id.edtRemarks);
+                edtDelRemark = itemView.findViewById(R.id.delRemarks);
 
 //                txtTitle.setText("Are you sure want to checkout?\nSales order confirmation will be emailed to you.");
                 btnYes.setText("Confirm");
@@ -336,6 +337,8 @@ public class QuotationActivity extends BaseActivity {
                             Toast.makeText(getApplicationContext(), "Please fill Ship To", Toast.LENGTH_SHORT).show();
                         } else if (edtRemarks.getText().toString().isEmpty()) {
                             Toast.makeText(getApplicationContext(), "Please fill Remarks", Toast.LENGTH_SHORT).show();
+                        }else if (edtDelRemark.getText().toString().isEmpty()) {
+                            Toast.makeText(getApplicationContext(), "Please fill Delivery Remarks", Toast.LENGTH_SHORT).show();
                         } else {
                             bottomSheet.dismiss();
                             showDialogConfirmationCheckOut();
@@ -433,6 +436,7 @@ public class QuotationActivity extends BaseActivity {
                         soRequest.setPhone(edtMobileNumber.getText().toString());
                         soRequest.setShipTo(edtShipTo.getText().toString());
                         soRequest.setRemarks(edtRemarks.getText().toString());
+                        soRequest.setDelRemark(edtDelRemark.getText().toString());
                         soRequest.setDelDate(sdf.format(delDate.getTime()));
                         SalesOrderDetails soDetails = new SalesOrderDetails();
                         List<SalesOrderDetails> listSO = new ArrayList<>();

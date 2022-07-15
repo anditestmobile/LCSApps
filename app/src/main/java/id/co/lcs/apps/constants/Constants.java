@@ -56,8 +56,8 @@ public class Constants {
     public static final String URL_IMAGE_3 = "http://58.185.191.42:6868/LCS_BNR03.jpg";
     public static final String URL_IMAGE_4 = "http://58.185.191.42:6868/LCS_BNR04.jpg";
 
-    public static final String BASE_URL = "http://58.185.191.42:6868";
-//    public static final String BASE_URL = "http://58.185.191.42:6870";
+//    public static final String BASE_URL = "http://58.185.191.42:6868";
+    public static final String BASE_URL = "http://58.185.191.42:6870";
 
     public static final int CONNECTION_TIMEOUT = 10; // 10 seconds
     public static final int READ_TIMEOUT = 60;

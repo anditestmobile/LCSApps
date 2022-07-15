@@ -28,6 +28,8 @@ public class SalesOrderRequest {
     private String shipTo;
     @SerializedName("Remarks")
     private String remarks;
+    @SerializedName("DelRemark")
+    private String delRemark;
     @SerializedName("SODraftItem")
     private List<SalesOrderDetails> soItem;
 
@@ -125,5 +127,13 @@ public class SalesOrderRequest {
 
     public void setContactPerson(String contactPerson) {
         this.contactPerson = contactPerson;
+    }
+
+    public String getDelRemark() {
+        return delRemark;
+    }
+
+    public void setDelRemark(String delRemark) {
+        this.delRemark = delRemark;
     }
 }

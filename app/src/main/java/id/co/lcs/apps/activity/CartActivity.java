@@ -95,7 +95,7 @@ public class CartActivity extends BaseActivity {
     private SalesOrderRequest soRequest;
     private List<Integer> pos = new ArrayList<>();
     private SalesOrderResponse wsResponse;
-    private EditText edtCustomerCode, edtMobileNumber, edtRemarks;
+    private EditText edtCustomerCode, edtMobileNumber, edtRemarks, edtDelRemark;
     private AutoCompleteTextView edtCompName;
     private Spinner spContactPerson, spShipTo;
     private CustomerResponse listCust;
@@ -377,6 +377,7 @@ public class CartActivity extends BaseActivity {
                 edtCustomerCode = itemView.findViewById(R.id.edtCustomerCode);
                 spShipTo = itemView.findViewById(R.id.spShipTo);
                 edtRemarks = itemView.findViewById(R.id.edtRemarks);
+                edtDelRemark = itemView.findViewById(R.id.delRemarks);
                 spContactPerson = itemView.findViewById(R.id.spContactPerson);
 
                 if (updateCart != null) {
@@ -390,11 +391,13 @@ public class CartActivity extends BaseActivity {
 //                    edtContactPerson.setText(updateCart.getContactPerson());
 //                    edtShipTo.setText(updateCart.getShipTo());
                     edtRemarks.setText(updateCart.getRemarks());
+                    edtDelRemark.setText(updateCart.getDelRemark());
                     spContactPerson.setEnabled(false);
                     edtCustomerCode.setEnabled(false);
                     edtMobileNumber.setEnabled(false);
                     edtCompName.setEnabled(false);
                     edtRemarks.setEnabled(false);
+                    edtDelRemark.setEnabled(false);
                 }
                 btnYes.setText("Confirm");
 
@@ -413,7 +416,9 @@ public class CartActivity extends BaseActivity {
 //                            Toast.makeText(getApplicationContext(), "Please fill Ship To", Toast.LENGTH_SHORT).show();
                         } else if (edtRemarks.getText().toString().isEmpty()) {
                             Toast.makeText(getApplicationContext(), "Please fill Remarks", Toast.LENGTH_SHORT).show();
-                        } else {
+                        } else if (edtDelRemark.getText().toString().isEmpty()) {
+                            Toast.makeText(getApplicationContext(), "Please fill Delivery Remarks", Toast.LENGTH_SHORT).show();
+                        }else {
                             bottomSheet.dismiss();
                             showDialogConfirmationCheckOut();
                         }
@@ -592,6 +597,7 @@ public class CartActivity extends BaseActivity {
         soRequest.setShipTo(listAutoShipTo.getStatusCode() != 1 ? ""
                 : listAutoShipTo.getResponseData().get(spShipTo.getSelectedItemPosition()).getName());
         soRequest.setRemarks(edtRemarks.getText().toString());
+        soRequest.setDelRemark(edtDelRemark.getText().toString());
         soRequest.setDelDate(sdf.format(delDate.getTime()));
         List<SalesOrderDetails> listSO = new ArrayList<>();
         for (int i = 0; i < productArrayList.size(); i++) {
@@ -626,6 +632,7 @@ public class CartActivity extends BaseActivity {
         soRequest.setShipTo(listAutoShipTo.getStatusCode() != 1 ? ""
                 : listAutoShipTo.getResponseData().get(spShipTo.getSelectedItemPosition()).getName());
         soRequest.setRemarks(edtRemarks.getText().toString());
+        soRequest.setDelRemark(edtDelRemark.getText().toString());
         soRequest.setDelDate(sdf.format(delDate.getTime()));
         List<SalesOrderDetails> listSO = new ArrayList<>();
         for (int i = 0; i < productArrayList.size(); i++) {

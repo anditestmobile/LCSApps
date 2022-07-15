@@ -43,8 +43,8 @@
         android:text="NO"
         android:textColor="@color/black"
         app:layout_constraintEnd_toStartOf="@+id/guidelineHalfContent"
-        app:layout_constraintStart_toStartOf="@+id/edtRemarks"
-        app:layout_constraintTop_toBottomOf="@+id/edtRemarks" />
+        app:layout_constraintStart_toStartOf="@+id/delRemarks"
+        app:layout_constraintTop_toBottomOf="@+id/delRemarks" />
 
     <Button
         android:id="@+id/btnEmail"
@@ -207,5 +207,28 @@
         app:layout_constraintEnd_toEndOf="@+id/spShipTo"
         app:layout_constraintStart_toStartOf="@+id/spShipTo"
         app:layout_constraintTop_toBottomOf="@+id/textView18" />
+
+    <TextView
+        android:id="@+id/textView19"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="Delivery Remarks"
+        android:textColor="@color/colorPrimary"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/edtRemarks"
+        app:layout_constraintTop_toBottomOf="@+id/edtRemarks" />
+
+    <EditText
+        android:id="@+id/delRemarks"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Delivery Remarks"
+        android:inputType="textPersonName"
+        android:imeOptions="actionDone"
+        app:layout_constraintEnd_toEndOf="@+id/edtRemarks"
+        app:layout_constraintStart_toStartOf="@+id/edtRemarks"
+        app:layout_constraintTop_toBottomOf="@+id/textView19" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
