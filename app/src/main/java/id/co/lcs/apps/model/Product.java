@@ -18,7 +18,8 @@ public class Product implements Serializable {
     private String uomName;
     @SerializedName("Category")
     private String productCategory;
-    @SerializedName("ImgURL")
+//    @SerializedName("ImgURL")
+    @SerializedName("LocalImgURL")
     private String imageUrl;
     @SerializedName("InStock")
     private String inStock;
