@@ -51,13 +51,18 @@ public class Constants {
     public static final String API_GR_SN_BATCH_INTERNAL = "SerialBatch/getSerialBatch";
     public static final String API_GET_COMMITED_QTY = "CommitedQty";
     public static final String API_STOCK_TAKE = "InventoryCounting";
-    public static final String URL_IMAGE_1 = "http://58.185.191.42:6868/LCS_BNR01.jpg";
-    public static final String URL_IMAGE_2 = "http://58.185.191.42:6868/LCS_BNR02.jpg";
-    public static final String URL_IMAGE_3 = "http://58.185.191.42:6868/LCS_BNR03.jpg";
-    public static final String URL_IMAGE_4 = "http://58.185.191.42:6868/LCS_BNR04.jpg";
+//    public static final String URL_IMAGE_1 = "http://58.185.191.42:6868/LCS_BNR01.jpg";
+//    public static final String URL_IMAGE_2 = "http://58.185.191.42:6868/LCS_BNR02.jpg";
+//    public static final String URL_IMAGE_3 = "http://58.185.191.42:6868/LCS_BNR03.jpg";
+//    public static final String URL_IMAGE_4 = "http://58.185.191.42:6868/LCS_BNR04.jpg";
+    public static final String URL_IMAGE_1 = "http://192.168.10.78:8082/LCS_BNR01.jpg";
+    public static final String URL_IMAGE_2 = "http://192.168.10.78:8082/LCS_BNR02.jpg";
+    public static final String URL_IMAGE_3 = "http://192.168.10.78:8082/LCS_BNR03.jpg";
+    public static final String URL_IMAGE_4 = "http://192.168.10.78:8082/LCS_BNR04.jpg";
 
 //    public static final String BASE_URL = "http://58.185.191.42:6868";
-    public static final String BASE_URL = "http://58.185.191.42:6870";
+//    public static final String BASE_URL = "http://58.185.191.42:6870";
+    public static final String BASE_URL = "http://192.168.10.90:6868";
 
     public static final int CONNECTION_TIMEOUT = 10; // 10 seconds
     public static final int READ_TIMEOUT = 60;

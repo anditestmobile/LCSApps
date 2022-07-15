@@ -20,6 +20,8 @@
         <entry key="..\:/Android/LCSApps/app/src/main/res/layout/row_view_product1_content.xml" value="0.209375" />
         <entry key="..\:/Android/LCSApps/app/src/main/res/layout/row_view_quotation.xml" value="0.209375" />
         <entry key="..\:/Android/LCSApps/app/src/main/res/layout/row_view_quotation_history.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_barcode.xml" value="0.36041666666666666" />
+        <entry key="app/src/main/res/layout/activity_cart.xml" value="0.36041666666666666" />
       </map>
     </option>
   </component>
